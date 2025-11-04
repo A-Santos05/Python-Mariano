@@ -1,6 +1,8 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from jogo import Jogo
 
+jogo = Jogo()
 
 @dataclass
 class Atributos:
@@ -8,9 +10,12 @@ class Atributos:
     vida: int
     ataque: int
     defesa: int
-    mana: int = 0
+    crit_chance: int
+    crit_dmg: int
+    mana: int
+    mana_regen: int
+    special_cost: int
     vida_max: int | None = None
-
 
 class Entidade:
     """Base para Personagem e Inimigo (sem regras avançadas)."""
