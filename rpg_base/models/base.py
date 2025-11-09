@@ -14,6 +14,7 @@ class Atributos:
     mana_pool: int = 0
     mana_regen: int = 0
     special_cost: int = 0
+    xp: int = 0
     recompensa_xp: int = 0
     vida_max: int | None = None
 

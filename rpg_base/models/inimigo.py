@@ -1,5 +1,6 @@
 from __future__ import annotations
 from .base import Entidade, Atributos
+import math
 import random
 
 class Inimigo(Entidade):
@@ -9,15 +10,16 @@ class Inimigo(Entidade):
     """
 
     def __init__(self, nome: str, vida: int, ataque: int, defesa: int, recompensa_xp: int):
-        super().__init__(nome, Atributos(vida=vida, ataque=ataque, defesa=defesa, vida_max=vida))
-        self.xp_drop = recompensa_xp # Experiência concedida ao jogador ao derrotar o inimigo
+        super().__init__(nome, Atributos(
+            vida=vida, ataque=ataque, defesa=defesa, vida_max=vida, recompensa_xp=recompensa_xp
+        ))
+        self.xp_drop = recompensa_xp
 
     def atacar(self) -> int: #Sobrepondo o método atacar da classe Entidade
         """Implementa um ataque simples com variação de dano."""
         dano_base = self._atrib.ataque
         variacao = random.randint(-2, 2)  # Variação simples de dano pra mais ou pra menos
         dano_final = max(1, dano_base + variacao)
-        self.receber_dano(dano_final) # É necessário?
         return dano_final
     
     def receber_dano(self, dano: int) -> int:
@@ -34,7 +36,7 @@ class Inimigo(Entidade):
         vida = 100,
         ataque = 5,
         defesa = 10,
-        recompensa_xp = 0 # definir recompensa de xp futura
+        recompensa_xp = 10 # definir recompensa de xp futura
     )
     
     @classmethod
@@ -44,7 +46,7 @@ class Inimigo(Entidade):
         ataque = 10,
         defesa = 10,
         vida = 100,
-        recompensa_xp = 0 # definir recompensa de xp futura
+        recompensa_xp = 10 # definir recompensa de xp futura
     )
     """
     def GoblinMago(cls) -> Inimigo:
@@ -63,7 +65,7 @@ class Inimigo(Entidade):
         ataque = 3,
         vida = 100,
         defesa = 20,
-        recompensa_xp = 0 # definir recompensa de xp futura
+        recompensa_xp = 10 # definir recompensa de xp futura
     )
     # atributos_GoblinGrandao = Inimigo(
     #     nome = "Goblin Grandão",

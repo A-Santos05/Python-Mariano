@@ -4,6 +4,7 @@ from models.personagem import Personagem
 from models.inimigo import Inimigo
 from models.missao import Missao, ResultadoMissao
 import random
+from typing import Any
 
 class Jogo:
     """
@@ -26,26 +27,47 @@ class Jogo:
         self._ultimo_save = None
         self._ultimo_load = None
 
-    def _obter_atributos_por_arquetipo(self, arquetipo: str) -> Atributos | None:
-        """Retorna a instância de Atributos específica para o arquétipo."""
+    def _obter_atributos_por_arquetipo(self, arquetipo: str) -> dict[str, Any] | None:
+        """Retorna a instância de Atributos e as Taxas de Crescimento para o arquétipo."""
         
         # Mapeamento dos conjuntos de atributos
         mapa_atributos = {
-            "Guerreiro": Atributos(
-                ataque=20, vida=100, defesa=40, 
-                crit_chance=35, crit_dmg=150, 
-                mana=0, mana_pool=30, mana_regen=3, special_cost=25
-            ),
-            "Mago": Atributos(
-                ataque=40, vida=100, defesa=5, 
-                crit_chance=10, crit_dmg=200, 
-                mana=0,mana_pool=60, mana_regen=10, special_cost=25
-            ),
-            "Arqueiro": Atributos(
-                ataque=35, vida=100, defesa=8, 
-                crit_chance=25, crit_dmg=120, 
-                mana=0,mana_pool=40, mana_regen=4, special_cost=25
-            )
+            "Guerreiro":{
+                "atributos_base": Atributos(
+                    ataque=20, vida=100, defesa=40, 
+                    crit_chance=35, crit_dmg=150, 
+                    mana=0, mana_pool=30, mana_regen=3, special_cost=25
+                ),
+                "taxas_crescimento": {
+                    "ataque": 2,
+                    "vida": 10,
+                    "defesa": 3,
+                }
+            },
+            "Mago":{
+                "atributos_base": Atributos(
+                    ataque=40, vida=100, defesa=5, 
+                    crit_chance=10, crit_dmg=200, 
+                    mana=0,mana_pool=60, mana_regen=10, special_cost=25
+                    ),
+                "taxas_crescimento": {
+                    "ataque": 4,
+                    "vida": 5,
+                    "defesa": 2,
+                }
+            },
+            "Arqueiro":{
+                "atributos_base": Atributos(
+                    ataque=35, vida=100, defesa=8, 
+                    crit_chance=25, crit_dmg=120, 
+                    mana=0,mana_pool=40, mana_regen=4, special_cost=25
+                    ),
+                "taxas_crescimento": {
+                    "ataque": 6,
+                    "vida": 5,
+                    "defesa": 1,
+                }
+            },
         }
         
         # Retorna a instância de Atributos ou None se não encontrado
@@ -111,25 +133,30 @@ class Jogo:
             print("Escolha um arquétipo antes de confirmar a criação.")
             return
         
-        arq = self.personagem["arquetipo"]
-        atributos = self._obter_atributos_por_arquetipo(arq)
+        arquetipo = self.personagem["arquetipo"]
+            
+        # Chama o método que agora retorna o dicionário completo
+        dados_arquetipo = self._obter_atributos_por_arquetipo(arquetipo) 
+            
+        if not dados_arquetipo:
+            print("Erro interno: Arquétipo não encontrado.")
+            return
+
+        # Extrai os dois componentes necessários
+        atributos_base = dados_arquetipo["atributos_base"]
+        taxas_crescimento = dados_arquetipo["taxas_crescimento"]
         
-        if atributos:
-            # 1. Cria a instância do Personagem (objeto real)
-            novo_personagem = Personagem(self.personagem["nome"], atributos)
-            
-            # 2. Armazena o personagem no estado do jogo
-            self._personagem_obj = novo_personagem 
-            
-            print("\nPersonagem criado com sucesso!")
-            print(f"Nome: {novo_personagem.nome} | Arquétipo: {arq}")
-            print(f"ATK: {atributos.ataque} | DEF: {atributos.defesa} | HP: {atributos.vida}")
-            print(f"Crit Chance: {atributos.crit_chance}% | Crit Dmg: {atributos.crit_dmg}%")
-            print(f"Mana Pool: {atributos.mana_pool} | Mana Regen: {atributos.mana_regen}/turno")
-            print(f"Vida Máxima Real: {novo_personagem._atrib.vida_max}")
-            
-        else:
-            print(f"Erro: Arquétipo '{arq}' não possui atributos definidos.")
+        # Linha CORRIGIDA: passando o novo argumento obrigatório
+        novo_personagem = Personagem(self.personagem["nome"], atributos_base, taxas_crescimento)
+
+        self._personagem_obj = novo_personagem
+        
+        print("\nPersonagem criado com sucesso!")
+        print(f"Nome: {novo_personagem.nome} | Arquétipo: {arquetipo}")
+        print(f"ATK: {atributos_base.ataque} | DEF: {atributos_base.defesa} | HP: {atributos_base.vida}")
+        print(f"Crit Chance: {atributos_base.crit_chance}% | Crit Dmg: {atributos_base.crit_dmg}%")
+        print(f"Mana Pool: {atributos_base.mana_pool} | Mana Regen: {atributos_base.mana_regen}/turno")
+        print(f"Vida Máxima Real: {novo_personagem._atrib.vida_max}")
 
     def _ajuda_criar_personagem(self) -> None:
         print("\nAjuda — Criar Personagem")

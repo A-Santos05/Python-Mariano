@@ -71,9 +71,7 @@ class Missao:
                 print("ERRO: Implemente Personagem.calcular_dano_base() primeiro.")
                 return ResultadoMissao(venceu=False, detalhes="Combate interrompido por erro de implementação.")
 
-
             if not i.vivo:
-                print(f"\n {i.nome} foi derrotado!")
                 break
                 
             # 2. INIMIGO ATACA PERSONAGEM
@@ -86,17 +84,29 @@ class Missao:
             print(f"HP {p.nome}: {p.barra_hp(10)}")
 
             if not p.vivo:
-                print(f"\n {p.nome} foi derrotado!")
                 break
                 
             turno += 1
             # Adicionar um pequeno delay ou pausa aqui se fosse um jogo real
 
+        if not i.vivo:
+            print("=============Vitória!=============")
+            print(f"{i.nome} foi derrotado!")
+            print("==================================")
+
+        if not p.vivo:
+            print("=============Derrota!=============")
+            print(f"{p.nome} foi derrotado!")
+            print("==================================")
+                
         # --- Resultado Final ---
         if p.vivo:
-            print(f"Vitória! {p.nome} concluiu a missão {self.titulo}.")
+            print(f"\n{p.nome} concluiu a missão {self.titulo}.\n")
+            
+            xp_ganho = i.xp_drop # Pega o XP que o inimigo dropa (definido em Inimigo)
+            p.ganhar_xp(xp_ganho)
             # Lógica de XP/Recompensa aqui
             return ResultadoMissao(venceu=True, detalhes=f"{p.nome} derrotou {i.nome}.")
         else:
-            print(f"Derrota! {p.nome} falhou na missão {self.titulo}.")
+            print(f"{p.nome} falhou na missão {self.titulo}.")
             return ResultadoMissao(venceu=False, detalhes=f"{p.nome} foi derrotado por {i.nome}.")
