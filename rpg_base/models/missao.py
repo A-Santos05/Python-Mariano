@@ -38,7 +38,7 @@ class Missao:
         i._atrib.vida = i._atrib.vida_max # Garante HP cheio no início do combate
         
         print(f"\n=== Missão: {self.titulo} ===")
-        print(f"O combate entre {p.nome} (Lvl {p.nivel}) e {i.nome} (HP: {i._atrib.vida}) começa!")
+        print(f"O combate entre {p.nome} (Lvl {p.nivel}) e {i.nome} (HP: {i._atrib.vida} DEF: {i._atrib.defesa} ATK: {i._atrib.ataque}) começa!")
 
         # --- Loop Principal do Combate ---
         turno = 1
@@ -51,10 +51,20 @@ class Missao:
                 dano_personagem = p.calcular_dano_base() 
                 
                 # Chamada ao método de Entidade para cálculo de dano
-                dano_recebido_inimigo = i.receber_dano(dano_personagem) 
+                dano_recebido_inimigo = i.receber_dano(dano_personagem)
                 
-                print(f"{p.nome} ataca! Dano base: {dano_personagem}.")
-                print(f"{i.nome} recebe {dano_recebido_inimigo} de dano.")
+                if p._atrib.mana < p._atrib.mana_pool:#Calculo de regeneração de mana
+                    if p._atrib.mana + p._atrib.mana_regen > p._atrib.mana_pool:
+                        p._atrib.mana = p._atrib.mana_pool
+                    else:
+                        p._atrib.mana += p._atrib.mana_regen
+
+                if p._atrib.mana >= p._atrib.special_cost:#Implementar uso de habilidade especial
+                    p._atrib.mana -= p._atrib.special_cost
+                    print(f"{p.nome} usou a habilidade especial!")#Habilidade especial ainda não foi implementada apenas placeholder
+                
+                print(f"{p.nome} ataca! {i.nome} recebe {dano_recebido_inimigo} de dano.")
+                print(f"MANA: {p._atrib.mana}/{p._atrib.mana_pool}")
                 print(f"HP {i.nome}: {i.barra_hp(10)}")
 
             except NotImplementedError:
@@ -63,7 +73,7 @@ class Missao:
 
 
             if not i.vivo:
-                print(f"\n🎉 {i.nome} foi derrotado!")
+                print(f"\n {i.nome} foi derrotado!")
                 break
                 
             # 2. INIMIGO ATACA PERSONAGEM
@@ -72,12 +82,11 @@ class Missao:
             dano_inimigo = i.atacar()
             dano_recebido_personagem = p.receber_dano(dano_inimigo)
             
-            print(f"{i.nome} revida! Dano base: {dano_inimigo}.")
-            print(f"{p.nome} recebe {dano_recebido_personagem} de dano.")
+            print(f"{i.nome} revida! {p.nome} recebe {dano_recebido_personagem} de dano.")
             print(f"HP {p.nome}: {p.barra_hp(10)}")
 
             if not p.vivo:
-                print(f"\n☠️ {p.nome} foi derrotado!")
+                print(f"\n {p.nome} foi derrotado!")
                 break
                 
             turno += 1

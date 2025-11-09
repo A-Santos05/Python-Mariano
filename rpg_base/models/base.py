@@ -11,6 +11,7 @@ class Atributos:
     crit_chance: int = 0
     crit_dmg: int = 100
     mana: int = 0
+    mana_pool: int = 0
     mana_regen: int = 0
     special_cost: int = 0
     recompensa_xp: int = 0

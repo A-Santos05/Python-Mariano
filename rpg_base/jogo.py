@@ -33,18 +33,18 @@ class Jogo:
         mapa_atributos = {
             "Guerreiro": Atributos(
                 ataque=20, vida=100, defesa=40, 
-                crit_chance=35, crit_dmg=50, 
-                mana=30, mana_regen=3, special_cost=25
+                crit_chance=35, crit_dmg=150, 
+                mana=0, mana_pool=30, mana_regen=3, special_cost=25
             ),
             "Mago": Atributos(
                 ataque=40, vida=100, defesa=5, 
                 crit_chance=10, crit_dmg=200, 
-                mana=80, mana_regen=10, special_cost=25
+                mana=0,mana_pool=60, mana_regen=10, special_cost=25
             ),
             "Arqueiro": Atributos(
                 ataque=35, vida=100, defesa=8, 
                 crit_chance=25, crit_dmg=120, 
-                mana=40, mana_regen=4, special_cost=25
+                mana=0,mana_pool=40, mana_regen=4, special_cost=25
             )
         }
         
@@ -89,16 +89,12 @@ class Jogo:
         print("[1] Guerreiro")
         print("[2] Mago")
         print("[3] Arqueiro")
-        print("[4] Curandeiro")
-        print("[5] Personalizado")
         escolha = input("> ").strip()
 
         mapa = {
             "1": "Guerreiro",
             "2": "Mago",
             "3": "Arqueiro",
-            "4": "Curandeiro",
-            "5": "Personalizado",
         }
         arq = mapa.get(escolha)
         if arq:
@@ -128,6 +124,8 @@ class Jogo:
             print("\nPersonagem criado com sucesso!")
             print(f"Nome: {novo_personagem.nome} | Arquétipo: {arq}")
             print(f"ATK: {atributos.ataque} | DEF: {atributos.defesa} | HP: {atributos.vida}")
+            print(f"Crit Chance: {atributos.crit_chance}% | Crit Dmg: {atributos.crit_dmg}%")
+            print(f"Mana Pool: {atributos.mana_pool} | Mana Regen: {atributos.mana_regen}/turno")
             print(f"Vida Máxima Real: {novo_personagem._atrib.vida_max}")
             
         else:

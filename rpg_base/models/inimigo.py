@@ -17,7 +17,6 @@ class Inimigo(Entidade):
         dano_base = self._atrib.ataque
         variacao = random.randint(-2, 2)  # Variação simples de dano pra mais ou pra menos
         dano_final = max(1, dano_base + variacao)
-        print(f"{self.nome} ataca! Dano causado: {dano_final}") # É necessário?
         self.receber_dano(dano_final) # É necessário?
         return dano_final
     
