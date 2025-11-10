@@ -367,3 +367,17 @@ class Jogo:
         print("\nAjuda — Carregar")
         print("- O carregamento aqui é apenas ilustrativo (sem leitura real).")
         print("- Use o nome que você “salvou” anteriormente para simular.")
+
+    def menu_atributos_personagem(self) -> None:
+        while True:
+            print("\n=== Atributos dos Personagens ===\n")
+            print("Guerreiro -> ATK:20 | DEF:40 | HP:100 | Crit Chance:35% | Crit Dmg:150% | Mana Pool:30 | Mana Regen:3/turno \n" \
+            "\nMago -> ATK:40 | DEF:5 | HP:100 | Crit Chance:10% | Crit Dmg:200% | Mana Pool:60 | Mana Regen:10/turno \n" \
+            "\nArqueiro -> ATK:35 | DEF:8 | HP:100 | Crit Chance:25% | Crit Dmg:120% | Mana Pool:40 | Mana Regen:4/turno\n")
+            print("[0] Voltar")
+            op = input("> ").strip()
+
+            if op == "0":
+                break
+            else:
+                print("Opção inválida.")
