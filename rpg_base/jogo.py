@@ -3,8 +3,8 @@ from models.base import Atributos
 from models.personagem import Personagem
 from models.inimigo import Inimigo
 from models.missao import Missao, ResultadoMissao
+from typing import Any, Dict
 import random
-from typing import Any
 
 class Jogo:
     """
@@ -72,6 +72,8 @@ class Jogo:
         
         # Retorna a instância de Atributos ou None se não encontrado
         return mapa_atributos.get(arquetipo)
+
+    
 
     def menu_criar_personagem(self) -> None:
         while True:
@@ -262,27 +264,53 @@ class Jogo:
         print(f"Status: {'VITÓRIA!' if resultado.venceu else 'DERROTA!'}")
         print(f"Detalhes: {resultado.detalhes}")
         
+    def _mapa_dificuldade(self) -> Dict[str, Dict[str, float]]:
+        """Define os multiplicadores de atributos para cada nível de dificuldade."""
+        return {
+            "Fácil": {
+                "ataque": 0.8,  # Inimigos causam 20% menos dano
+                "defesa": 0.8,  # Inimigos têm 20% menos defesa
+                "vida": 0.8,    # Inimigos têm 20% menos HP
+                "xp": 1.0,      # XP é o mesmo
+            },
+            "Média": {
+                "ataque": 1.0,  # Atributos base (Normal)
+                "defesa": 1.0,
+                "vida": 1.0,
+                "xp": 1.0,
+            },
+            "Difícil": {
+                "ataque": 1.2,  # Inimigos causam 20% mais dano
+                "defesa": 1.2,  # Inimigos têm 20% mais defesa
+                "vida": 1.2,    # Inimigos têm 20% mais HP
+                "xp": 1.5,      # XP ganho é 50% maior (como recompensa pelo desafio)
+            }
+        }
 
     def _gerar_inimigo_aleatorio(self) -> Inimigo:
         """
         Gera e retorna uma instância aleatória de Inimigo chamando um método de fábrica.
         Desconsidera a dificuldade por enquanto.
         """
-        
+        dificuldade_atual = self.missao_config['dificuldade']
+        mapa = self._mapa_dificuldade()
+        multiplicadores = mapa.get(dificuldade_atual, mapa["Média"]) # Pega os multiplicadores, padrão Média
+
+        print(f"Dificuldade: {dificuldade_atual} | Multiplicador de ATK/DEF/HP: {multiplicadores['ataque']}")
+
         # Mapeamento de todos os métodos de criação disponíveis
         # Estes são os métodos de classe que retornam uma instância de Inimigo
         metodos_fabrica = [
             Inimigo.GoblinNormal,
             Inimigo.GoblinArqueiro,
             Inimigo.GoblinEscudeiro,
-            # Adicione outros métodos de fábrica da classe Inimigo aqui se houver
         ]
             
         # 1. Escolhe um MÉTODO aleatoriamente
         metodo_escolhido = random.choice(metodos_fabrica)
         
         # 2. Executa o método para instanciar o objeto (ex.: Inimigo.goblin_normal())
-        inimigo_instancia = metodo_escolhido()
+        inimigo_instancia = metodo_escolhido(multiplicadores)
         
         print(f"Inimigo gerado: {inimigo_instancia.nome}")
         return inimigo_instancia

@@ -1,5 +1,6 @@
 from __future__ import annotations
 from .base import Entidade, Atributos
+from typing import Dict, Any
 import math
 import random
 
@@ -30,24 +31,35 @@ class Inimigo(Entidade):
     """Definições de atributos para inimigos específicos"""
 
     @classmethod
-    def GoblinNormal(cls) -> Inimigo:
-       return cls(
-        nome = "Goblin Normal",
-        vida = 100,
-        ataque = 5,
-        defesa = 10,
-        recompensa_xp = 10 # definir recompensa de xp futura
-    )
-    
-    @classmethod
-    def GoblinArqueiro(cls) -> Inimigo:
+    def GoblinNormal(cls, multiplicadores: Dict[str, float]) -> Inimigo:
+        vida_base = 100
+        ataque_base = 5
+        defesa_base = 10
+        xp_base = 10 # definir recompensa de xp futura
+
         return cls(
-        nome = "Goblin Arqueiro",
-        ataque = 10,
-        defesa = 10,
-        vida = 100,
-        recompensa_xp = 10 # definir recompensa de xp futura
+        nome = "Goblin Normal",
+        vida = int(vida_base * multiplicadores.get("vida", 1.0)),
+        ataque = int(ataque_base * multiplicadores.get("ataque", 1.0)),
+        defesa = int(defesa_base * multiplicadores.get("defesa", 1.0)),
+        recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0))
     )
+
+    @classmethod
+    def GoblinArqueiro(cls, multiplicadores: Dict[str, float]) -> Inimigo:
+        ataque_base = 10
+        defesa_base = 10
+        vida_base = 100
+        xp_base = 10 # definir recompensa de xp futura
+
+        return cls(
+            nome = "Goblin Arqueiro",
+            vida = int(vida_base * multiplicadores.get("vida", 1.0)),
+            ataque = int(ataque_base * multiplicadores.get("ataque", 1.0)),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0)),
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0))
+        )
+
     """
     def GoblinMago(cls) -> Inimigo:
         return cls(
@@ -59,14 +71,20 @@ class Inimigo(Entidade):
     )
     """
     @classmethod
-    def GoblinEscudeiro(cls) -> Inimigo:
+    def GoblinEscudeiro(cls, multiplicadores: Dict[str, float]) -> Inimigo:
+        ataque_base = 3
+        vida_base = 100
+        defesa_base = 20
+        xp_base = 10 # definir recompensa de xp futura
+
         return cls(
-        nome = "Goblin Escudeiro",
-        ataque = 3,
-        vida = 100,
-        defesa = 20,
-        recompensa_xp = 10 # definir recompensa de xp futura
-    )
+            nome = "Goblin Escudeiro",
+            vida = int(vida_base * multiplicadores.get("vida", 1.0)),
+            ataque = int(ataque_base * multiplicadores.get("ataque", 1.0)),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0)),
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0))
+        )
+
     # atributos_GoblinGrandao = Inimigo(
     #     nome = "Goblin Grandão",
     #     ataque = # em definição
