@@ -61,7 +61,8 @@ class Inimigo(Entidade):
         vida_base = 100
         xp_base = 10 # definir recompensa de xp futura
         
-        drop_chance = random.random() < 0.3 
+        
+        drop_chance = random.random() < 0.7 
         item_dropar = Item(
             nome="Bandagem Simples", 
             tipo="Consumível", 
