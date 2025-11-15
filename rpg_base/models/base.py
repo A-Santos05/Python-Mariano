@@ -50,9 +50,9 @@ class Entidade:
         return self._atrib.ataque
 
     def receber_dano(self, dano: int) -> int:
-        """Dano efetivo simples (placeholder)."""
         efetivo = max(1, dano - math.ceil(dano * (self._atrib.defesa / 100)))
         self._atrib.vida = max(0, self._atrib.vida - efetivo)
+
         return efetivo
 
     def barra_hp(self, largura: int = 20) -> str:

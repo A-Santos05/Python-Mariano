@@ -271,23 +271,26 @@ class Jogo:
     def _mapa_dificuldade(self) -> Dict[str, Dict[str, float]]:
         """Define os multiplicadores de atributos para cada nível de dificuldade."""
         return {
-            "Fácil": {
-                "ataque": 0.8,  # Inimigos causam 20% menos dano
-                "defesa": 0.8,  # Inimigos têm 20% menos defesa
-                "vida": 0.8,    # Inimigos têm 20% menos HP
-                "xp": 1.0,      # XP é o mesmo
+            "Fácil": { #Multiplicador dos atributos base (facil)
+                "ataque": 0.8,
+                "dano_verdadeiro": 0.8,
+                "defesa": 0.8,
+                "vida": 0.8,
+                "xp": 1.0,
             },
-            "Média": {
-                "ataque": 1.0,  # Atributos base (Normal)
+            "Média": { #Multiplicador dos atributos base (normal)
+                "ataque": 1.0,
+                "dano_verdadeiro": 1.0,
                 "defesa": 1.0,
                 "vida": 1.0,
                 "xp": 1.0,
             },
-            "Difícil": {
-                "ataque": 1.2,  # Inimigos causam 20% mais dano
-                "defesa": 1.2,  # Inimigos têm 20% mais defesa
-                "vida": 1.2,    # Inimigos têm 20% mais HP
-                "xp": 1.5,      # XP ganho é 50% maior (como recompensa pelo desafio)
+            "Difícil": { #Multiplicador dos atributos base (dificil)
+                "ataque": 1.2,
+                "dano_verdadeiro": 1.2,
+                "defesa": 1.2,
+                "vida": 1.2,
+                "xp": 1.5,
             }
         }
 
@@ -305,9 +308,10 @@ class Jogo:
         # Mapeamento de todos os métodos de criação disponíveis
         # Estes são os métodos de classe que retornam uma instância de Inimigo
         metodos_fabrica = [
-            Inimigo.GoblinNormal,
-            Inimigo.GoblinArqueiro,
-            Inimigo.GoblinEscudeiro,
+            #Inimigo.GoblinNormal,
+            #Inimigo.GoblinArqueiro,
+            #Inimigo.GoblinEscudeiro,
+            Inimigo.GoblinMago,
         ]
             
         # 1. Escolhe um MÉTODO aleatoriamente

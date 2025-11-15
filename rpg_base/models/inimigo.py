@@ -10,19 +10,29 @@ class Inimigo(Entidade):
     Sem IA/variações — apenas o contêiner para atributos básicos.
     """
 
-    def __init__(self, nome: str, vida: int, ataque: int, defesa: int, recompensa_xp: int, item_drop: Optional[Item] = None):
+    def __init__(self, nome: str, vida: int, ataque: int, defesa: int, recompensa_xp: int, item_drop: Optional[Item] = None, dano_verdadeiro_perc: int = 0):
         super().__init__(nome, Atributos(
-            vida=vida, ataque=ataque, defesa=defesa, vida_max=vida, recompensa_xp=recompensa_xp
+            vida=vida, ataque=ataque, defesa=defesa, vida_max=vida, recompensa_xp=recompensa_xp, dano_verdadeiro_perc=dano_verdadeiro_perc
         ))
         self.xp_drop = recompensa_xp
         self.item_drop = item_drop
 
-    def atacar(self) -> int: #Sobrepondo o método atacar da classe Entidade
-        """Implementa um ataque simples com variação de dano."""
+    def calcular_dano_base(self) -> Tuple[int, int]:
+        """Implementa um cálculo de dano para o inimigo com variação e Dano Verdadeiro."""
         dano_base = self._atrib.ataque
-        variacao = random.randint(-2, 2)  # Variação simples de dano pra mais ou pra menos
-        dano_final = max(1, dano_base + variacao)
-        return dano_final
+        variacao = random.randint(0, 2)
+        dano_total = max(1, dano_base + variacao)
+        
+        # 1. Divide o dano total em Dano Verdadeiro e Dano Normal
+        dano_verdadeiro = int(dano_total * (self._atrib.dano_verdadeiro_perc / 100))
+        dano_normal = dano_total - dano_verdadeiro
+        
+        return dano_normal, dano_verdadeiro
+
+    # Atualiza o atacar para retornar a tupla (dano_normal, dano_verdadeiro)
+    def atacar(self) -> Tuple[int, int]: 
+        """Ataque do Inimigo: retorna a tupla (dano_normal, dano_verdadeiro)."""
+        return self.calcular_dano_base()
     
     def receber_dano(self, dano: Union[int, Tuple[int, int]]) -> int:
         """
@@ -64,12 +74,12 @@ class Inimigo(Entidade):
         defesa_base = 10
         xp_base = 10 # definir recompensa de xp futura
 
-        drop_chance = random.random() < 0.5 
+        drop_chance = random.random() < 0.5
         item_dropar = Item(
-            nome="Poção de Cura Menor", 
-            tipo="Consumível", 
-            efeito_quant=30, 
-            efeito_atributo="vida"
+            nome = "Poção de Cura Menor", 
+            tipo = "Consumível", 
+            efeito_quant = 25, 
+            efeito_atributo = "vida"
         ) if drop_chance else None
         
         return cls(
@@ -87,13 +97,12 @@ class Inimigo(Entidade):
         vida_base = 100
         xp_base = 10 # definir recompensa de xp futura
         
-        
-        drop_chance = random.random() < 0.7 
+        drop_chance = random.random() < 0.7
         item_dropar = Item(
-            nome="Bandagem Simples", 
-            tipo="Consumível", 
-            efeito_quant=10, 
-            efeito_atributo="vida"
+            nome = "Bandagem Simples", 
+            tipo = "Consumível", 
+            efeito_quant = 10, 
+            efeito_atributo = "vida"
         ) if drop_chance else None
         
         return cls(
@@ -105,16 +114,40 @@ class Inimigo(Entidade):
             recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0))
         )
 
-    """
-    def GoblinMago(cls) -> Inimigo:
+    @classmethod
+    def GoblinMago(cls, multiplicadores: Dict[str, float]) -> Inimigo:
+        ataque_base = 20
+        dano_verdadeiro_base = 25
+        defesa_base = 10
+        vida_base = 100
+        xp_base = 10
+
+        drop_chance = random.random() < 0.3
+        
+        item_dropar = Item(
+            nome = "Poção de Cura",
+            tipo = "Consumível",
+            efeito_quant = 25,
+            efeito_atributo = "vida"
+        ) if drop_chance else None
+        """
+        item_dropar = Item(
+            nome="Poção de Mana", 
+            tipo="Consumível", 
+            efeito_quant=10, 
+            efeito_atributo="mana"
+        ) if drop_chance else None
+        """
         return cls(
-        nome = "Goblin Mago",
-       # ataque = implementar ataque mágico futuramente (ataque de dano verdadeiro)
-        defesa  = 15,
-        vida = 100, # podendo diminuir a vida com base no ataque mágico em definição
-        recompensa_xp = 0# definir recompensa de xp futura
-    )
-    """
+            nome = "Goblin Mago",
+            vida = int(vida_base * multiplicadores.get("vida", 1.0)),
+            ataque = int(ataque_base * multiplicadores.get("ataque", 1.0)),
+            dano_verdadeiro_perc = int(dano_verdadeiro_base * multiplicadores.get("dano_verdadeiro",1.0)),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0)),
+            item_drop = item_dropar,
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0))
+        )
+    
     @classmethod
     def GoblinEscudeiro(cls, multiplicadores: Dict[str, float]) -> Inimigo:
         ataque_base = 3
@@ -122,7 +155,7 @@ class Inimigo(Entidade):
         defesa_base = 20
         xp_base = 10 # definir recompensa de xp futura
 
-        drop_chance = random.random() < 0.7 
+        drop_chance = random.random() < 0.7
         item_dropar = Item(
             nome="Bandagem Simples", 
             tipo="Consumível", 

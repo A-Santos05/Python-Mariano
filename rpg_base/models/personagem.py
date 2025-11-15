@@ -1,7 +1,9 @@
 from __future__ import annotations
 from .base import Entidade, Atributos, Item
+from typing import List, Union, Tuple
 import random
-from typing import List
+import math
+
 
 class Personagem(Entidade):
     """
@@ -67,6 +69,32 @@ class Personagem(Entidade):
         dano_normal = dano_final - dano_verdadeiro
         
         return dano_normal, dano_verdadeiro
+    
+    def receber_dano(self, dano: Union[int, Tuple[int, int]]) -> int:
+        """
+        Recebe dano. Se for uma tupla, processa dano normal e verdadeiro.
+        Tupla esperada: (dano_normal, dano_verdadeiro)
+        """
+        dano_total_recebido = 0
+
+        if isinstance(dano, tuple):
+            dano_normal, dano_verdadeiro = dano
+            
+            # 1. Cálculo do Dano Normal (reduzido pela defesa da Entidade)
+            dano_reduzido = max(1, dano_normal - math.ceil(dano_normal * (self._atrib.defesa / 100)))
+            
+            # 2. Dano Verdadeiro é aplicado diretamente
+            
+            dano_total_recebido = dano_reduzido + dano_verdadeiro
+            
+            print(f"    (Dano Normal: {dano_normal} -> {dano_reduzido} | Dano Verdadeiro: {dano_verdadeiro})")
+            
+            # Aplica o dano total à vida do Personagem
+            self._atrib.vida = max(0, self._atrib.vida - dano_total_recebido)
+            return dano_total_recebido
+        else:
+            # Comportamento base (dano simples INT) - usa o método da Entidade
+            return super().receber_dano(dano)
 
     def habilidade_especial(self) -> int:
         """
