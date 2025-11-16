@@ -214,8 +214,9 @@ class Jogo:
         print("[2] Floresta")
         print("[3] Caverna")
         print("[4] Ruínas")
+        print("[5] Bostil")
         op = input("> ").strip()
-        mapa = {"1": "Trilha", "2": "Floresta", "3": "Caverna", "4": "Ruínas"}
+        mapa = {"1": "Trilha", "2": "Floresta", "3": "Caverna", "4": "Ruínas", "5": "Bostil"}
         cen = mapa.get(op)
         if cen:
             self.missao_config["cenario"] = cen
@@ -311,7 +312,10 @@ class Jogo:
         ]
             
         # 1. Escolhe um MÉTODO aleatoriamente
-        metodo_escolhido = random.choice(metodos_fabrica)
+        if self._personagem_obj.nivel >= 9 and self.missao_config["cenario"] == "Bostil":
+            metodo_escolhido =Inimigo.ReiDoBostil
+        else:
+            metodo_escolhido = random.choice(metodos_fabrica)
         
         # 2. Executa o método para instanciar o objeto (ex.: Inimigo.goblin_normal())
         inimigo_instancia = metodo_escolhido(multiplicadores)

@@ -162,3 +162,29 @@ class Personagem(Entidade):
             
             # Recalcula o CAP para o novo nível
             cap_xp = Personagem.xp_necessario_para_nivel(self.nivel)
+
+
+    def aplicar_sangramento(self, dano_por_turno: int, duracao_turnos: int) -> None:
+        """Aplica ou atualiza o efeito de sangramento."""
+        self._atrib.sangramento_dano = dano_por_turno
+        self._atrib.sangramento_duracao = duracao_turnos
+        print(f"** {self.nome} foi SANGRAMENTADO! Receberá {dano_por_turno} de dano por 🩸 {duracao_turnos} turnos! **")
+
+    # NOVO: Processar dano de Sangramento
+    def processar_sangramento(self) -> int:
+        """Aplica o dano de sangramento se ativo e decrementa a duração."""
+        dano_total = 0
+        if self._atrib.sangramento_duracao > 0:
+            dano_sangramento = self._atrib.sangramento_dano
+            
+            # Sangramento é Dano Verdadeiro (ignora defesa)
+            self._atrib.vida = max(0, self._atrib.vida - dano_sangramento)
+            self._atrib.sangramento_duracao -= 1
+            dano_total += dano_sangramento
+            
+            print(f"🩸 Sangramento: {self.nome} perde {dano_sangramento} HP! (Restam {self._atrib.sangramento_duracao} turnos)")
+
+            if self._atrib.sangramento_duracao == 0:
+                print("Sangramento cessou.")
+
+        return dano_total

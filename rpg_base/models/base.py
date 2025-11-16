@@ -27,6 +27,8 @@ class Atributos:
     xp: int = 0
     recompensa_xp: int = 0
     vida_max: int | None = None
+    sangramento_dano: int = 0
+    sangramento_duracao: int = 0
 
 class Entidade:
     """Base para Personagem e Inimigo (sem regras avançadas)."""

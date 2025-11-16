@@ -1,5 +1,6 @@
 from __future__ import annotations
 from .base import Entidade, Atributos, Item
+from .personagem import Personagem
 from typing import Dict, Optional, Union, Tuple
 import math
 import random
@@ -159,3 +160,44 @@ class Inimigo(Entidade):
             itens_drop = lista_de_possiveis_drops,
             recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0))
         )
+    
+    @classmethod
+    def ReiDoBostil(cls, multiplicadores: Dict[str, float]) -> Inimigo:
+        vida_base = 350
+        ataque_base = 20
+        defesa_base = 15
+        xp_base = 100
+        
+        return cls(
+            nome = "Globin",
+            vida = int(vida_base * multiplicadores.get("vida", 1.0)),
+            ataque = int(ataque_base * multiplicadores.get("ataque", 1.0)),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0)),
+            itens_drop = None,
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0))
+        )
+    
+    def atacar_especial(self, alvo: Personagem) -> int:
+        """
+        Ataque especial do Boss que aplica Sangramento.
+        Este ataque sempre acerta, mas não é um dano altíssimo.
+        """
+        # Dano base do ataque especial
+        dano_base = int(self._atrib.ataque * 0.75)
+        dano_variacao = random.randint(-1, 1)
+        dano_final = max(1, dano_base + dano_variacao)
+        
+        # O dano é aplicado como dano normal (reduzido pela defesa do Personagem)
+        dano_recebido = alvo.receber_dano(dano_final)
+        
+        # Aplica o efeito de Sangramento
+        # Sangramento padrão: 10 de dano por turno, duração de 2 turnos
+        dano_sangramento = 13
+        duracao = 2 
+
+        print(f"** {self.nome} usa ATAQUE SANGRENTO! {alvo.nome} recebe {dano_recebido} de dano! **")
+
+        alvo.aplicar_sangramento(dano_sangramento, duracao)
+        
+        
+        return dano_recebido

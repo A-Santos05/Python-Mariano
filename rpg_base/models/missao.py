@@ -45,6 +45,8 @@ class Missao:
         while p.vivo and i.vivo:
             print(f"\n--- Turno {turno} ---")
             
+            p.processar_sangramento()
+
             # 1. PERSONAGEM ATACA INIMIGO
             # Chamada ao método que você deve implementar em Personagem
             try:
@@ -71,6 +73,42 @@ class Missao:
             except NotImplementedError:
                 print("ERRO: Implemente Personagem.calcular_dano_base() primeiro.")
                 return ResultadoMissao(venceu=False, detalhes="Combate interrompido por erro de implementação.")
+            
+            if not i.vivo:
+                print("Inimigo morreu")
+                break
+
+            print("Inimigo ainda vivo")
+            # NOVO: Lógica para o ataque especial do Goblin Grandão
+            if i.nome == "Globi":
+                # 30% de chance para o ataque especial de Sangramento
+                chance_especial = 0.3
+                if random.random() < chance_especial:
+                    # Se for Boss e a chance de ataque especial ocorrer
+                    dano_recebido_personagem = i.atacar_especial(p)
+                else:
+                    # Se for Boss, mas o ataque especial falhar, faz o ataque normal
+                    dano_inimigo = i.atacar()
+                    dano_recebido_personagem = p.receber_dano(dano_inimigo)
+                    print(f"{i.nome} ataca normalmente! {p.nome} recebe {dano_recebido_personagem} de dano.")
+            else:
+                # 2. INIMIGO ATACA PERSONAGEM
+                
+                # Usamos o método 'atacar' da classe Entidade (método base simples)
+                dano_inimigo = i.atacar()
+                # O Personagem.receber_dano (que herda de Entidade) ainda espera um 'int' de dano normal
+                dano_recebido_personagem = p.receber_dano(dano_inimigo)
+                
+                print(f"{i.nome} revida! {p.nome} recebe {dano_recebido_personagem} de dano.")
+
+            print(f"HP {p.nome}: {p.barra_hp(10)}")
+
+            if not p.vivo:
+                print("Personagem morreu")
+                break
+            print("Personagem ainda vivo")       
+            turno += 1
+                # Adicionar um pequeno delay ou pausa aqui se fosse um jogo real
 
             if not i.vivo:
                 break
