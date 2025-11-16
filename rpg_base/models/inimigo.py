@@ -10,13 +10,16 @@ class Inimigo(Entidade):
     Sem IA/variações — apenas o contêiner para atributos básicos.
     """
 
-    def __init__(self, nome: str, vida: int, ataque: int, defesa: int, recompensa_xp: int, item_drop: Optional[Item] = None, dano_verdadeiro_perc: int = 0):
-        super().__init__(nome, Atributos(
-            vida=vida, ataque=ataque, defesa=defesa, vida_max=vida, recompensa_xp=recompensa_xp, dano_verdadeiro_perc=dano_verdadeiro_perc
-        ))
-        self.xp_drop = recompensa_xp
-        self.item_drop = item_drop
+    from typing import List, Optional
 
+    def __init__(self, nome: str, vida: int, ataque: int, defesa: int, recompensa_xp: int, itens_drop: Optional[List[Item]] = None, dano_verdadeiro_perc: int = 0):
+    super().__init__(nome, Atributos(
+        vida=vida, ataque=ataque, defesa=defesa, vida_max=vida, recompensa_xp=recompensa_xp, dano_verdadeiro_perc=dano_verdadeiro_perc
+    ))
+    self.xp_drop = recompensa_xp
+    self.itens_drop = itens_drop or []
+
+    
     def calcular_dano_base(self) -> Tuple[int, int]:
         """Implementa um cálculo de dano para o inimigo com variação e Dano Verdadeiro."""
         dano_base = self._atrib.ataque

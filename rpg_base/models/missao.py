@@ -109,8 +109,10 @@ class Missao:
             p.ganhar_xp(xp_ganho)
             # Lógica de XP/Recompensa aqui
 
-            if i.item_drop:
-                p.coletar_item(i.item_drop)
+            if i.itens_drop:
+                item_sorteado = random.choice(i.itens_drop)
+                print(f"{p.nome} ganhou o item: {item_sorteado.nome}")
+                p.coletar_item(item_sorteado)
 
             return ResultadoMissao(venceu=True, detalhes=f"{p.nome} derrotou {i.nome}.")
         else:
