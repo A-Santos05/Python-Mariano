@@ -13,13 +13,13 @@ class Inimigo(Entidade):
     from typing import List, Optional
 
     def __init__(self, nome: str, vida: int, ataque: int, defesa: int, recompensa_xp: int, itens_drop: Optional[List[Item]] = None, dano_verdadeiro_perc: int = 0):
-    super().__init__(nome, Atributos(
-        vida=vida, ataque=ataque, defesa=defesa, vida_max=vida, recompensa_xp=recompensa_xp, dano_verdadeiro_perc=dano_verdadeiro_perc
-    ))
-    self.xp_drop = recompensa_xp
-    self.itens_drop = itens_drop or []
+        super().__init__(nome, Atributos(
+            vida=vida, ataque=ataque, defesa=defesa, vida_max=vida, recompensa_xp=recompensa_xp, dano_verdadeiro_perc=dano_verdadeiro_perc
+        ))
+        self.xp_drop = recompensa_xp
+        self.itens_drop = itens_drop or []
 
-    
+
     def calcular_dano_base(self) -> Tuple[int, int]:
         """Implementa um cálculo de dano para o inimigo com variação e Dano Verdadeiro."""
         dano_base = self._atrib.ataque
@@ -75,24 +75,23 @@ class Inimigo(Entidade):
         vida_base = 100
         ataque_base = 5
         defesa_base = 10
-        xp_base = 10 # definir recompensa de xp futura
+        xp_base = 10
 
-        drop_chance = random.random() < 0.5
-        item_dropar = Item(
-            nome = "Poção de Cura Menor", 
-            tipo = "Consumível", 
-            efeito_quant = 25, 
-            efeito_atributo = "vida"
-        ) if drop_chance else None
-        
+        lista_de_possiveis_drops = [
+            Item("Poção de Cura Menor", "Consumível", 25, "vida"),
+            Item("Bandagem Simples", "Consumível", 10, "vida"),
+            # Adicione mais se quiser!
+        ]
+
         return cls(
             nome = "Goblin Normal",
             vida = int(vida_base * multiplicadores.get("vida", 1.0)),
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0)),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0)),
-            item_drop = item_dropar,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0)))
-        
+            itens_drop = lista_de_possiveis_drops,
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0))
+        )
+
     @classmethod
     def GoblinArqueiro(cls, multiplicadores: Dict[str, float]) -> Inimigo:
         ataque_base = 10
@@ -100,20 +99,18 @@ class Inimigo(Entidade):
         vida_base = 100
         xp_base = 10 # definir recompensa de xp futura
         
-        drop_chance = random.random() < 0.7
-        item_dropar = Item(
-            nome = "Bandagem Simples", 
-            tipo = "Consumível", 
-            efeito_quant = 10, 
-            efeito_atributo = "vida"
-        ) if drop_chance else None
-        
+        lista_de_possiveis_drops = [
+            Item("Poção de Cura Menor", "Consumível", 25, "vida"),
+            Item("Bandagem Simples", "Consumível", 10, "vida"),
+            # Adicione mais se quiser!
+        ]
+
         return cls(
             nome = "Goblin Arqueiro",
             vida = int(vida_base * multiplicadores.get("vida", 1.0)),
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0)),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0)),
-            item_drop = item_dropar,
+            itens_drop = lista_de_possiveis_drops,
             recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0))
         )
 
@@ -125,29 +122,19 @@ class Inimigo(Entidade):
         vida_base = 100
         xp_base = 10
 
-        drop_chance = random.random() < 0.3
-        
-        item_dropar = Item(
-            nome = "Poção de Cura",
-            tipo = "Consumível",
-            efeito_quant = 25,
-            efeito_atributo = "vida"
-        ) if drop_chance else None
-        """
-        item_dropar = Item(
-            nome="Poção de Mana", 
-            tipo="Consumível", 
-            efeito_quant=10, 
-            efeito_atributo="mana"
-        ) if drop_chance else None
-        """
+        lista_de_possiveis_drops = [
+            Item("Poção de Cura Menor", "Consumível", 25, "vida"),
+            Item("Bandagem Simples", "Consumível", 10, "vida"),
+            # Adicione mais se quiser!
+        ]
+
         return cls(
             nome = "Goblin Mago",
             vida = int(vida_base * multiplicadores.get("vida", 1.0)),
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0)),
             dano_verdadeiro_perc = int(dano_verdadeiro_base * multiplicadores.get("dano_verdadeiro",1.0)),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0)),
-            item_drop = item_dropar,
+            itens_drop = lista_de_possiveis_drops,
             recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0))
         )
     
@@ -158,28 +145,17 @@ class Inimigo(Entidade):
         defesa_base = 20
         xp_base = 10 # definir recompensa de xp futura
 
-        drop_chance = random.random() < 0.7
-        item_dropar = Item(
-            nome="Bandagem Simples", 
-            tipo="Consumível", 
-            efeito_quant=10, 
-            efeito_atributo="vida"
-        ) if drop_chance else None
+        lista_de_possiveis_drops = [
+            Item("Poção de Cura Menor", "Consumível", 25, "vida"),
+            Item("Bandagem Simples", "Consumível", 10, "vida"),
+            # Adicione mais se quiser!
+        ]
         
         return cls(
             nome = "Goblin Escudeiro",
             vida = int(vida_base * multiplicadores.get("vida", 1.0)),
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0)),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0)),
-            item_drop = item_dropar,
+            itens_drop = lista_de_possiveis_drops,
             recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0))
         )
-
-    # atributos_GoblinGrandao = Inimigo(
-    #     nome = "Goblin Grandão",
-    #     ataque = # em definição
-    #     defesa = # em definição
-    #     vida = # em definição
-    #     habilidade especial(buscar atributo para utilziar habilidade especial em 'Entidades')
-    #     recompensa_xp = # definir recompensa de xp futura
-    # )

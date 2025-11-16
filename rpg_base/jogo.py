@@ -34,8 +34,8 @@ class Jogo:
         mapa_atributos = {
             "Guerreiro":{
                 "atributos_base": Atributos(
-                    ataque=20, vida=100, defesa=40, 
-                    crit_chance=35, crit_dmg=150, 
+                    ataque=25, vida=100, defesa=40, 
+                    crit_chance=35, crit_dmg=150,
                     mana=0, mana_pool=30, mana_regen=3, special_cost=25
                 ),
                 "taxas_crescimento": {
@@ -46,31 +46,30 @@ class Jogo:
             },
             "Mago":{
                 "atributos_base": Atributos(
-                    ataque=40, vida=100, defesa=3, 
+                    ataque=25, vida=100, defesa=20, 
                     crit_chance=5, crit_dmg=200, 
                     mana=0,mana_pool=60, mana_regen=10, special_cost=25, dano_verdadeiro_perc=25
                     ),
                 "taxas_crescimento": {
-                    "ataque": 4,
+                    "ataque": 3,
                     "vida": 5,
                     "defesa": 2,
                 }
             },
             "Arqueiro":{
                 "atributos_base": Atributos(
-                    ataque=35, vida=100, defesa=8, 
+                    ataque=30, vida=100, defesa=15, 
                     crit_chance=25, crit_dmg=120, 
                     mana=0,mana_pool=40, mana_regen=4, special_cost=25
                     ),
                 "taxas_crescimento": {
-                    "ataque": 6,
+                    "ataque": 4,
                     "vida": 5,
                     "defesa": 1,
                 }
             },
         }
         
-        # Retorna a instância de Atributos ou None se não encontrado
         return mapa_atributos.get(arquetipo)
 
     
@@ -141,18 +140,15 @@ class Jogo:
         
         arquetipo = self.personagem["arquetipo"]
             
-        # Chama o método que agora retorna o dicionário completo
         dados_arquetipo = self._obter_atributos_por_arquetipo(arquetipo) 
             
         if not dados_arquetipo:
             print("Erro interno: Arquétipo não encontrado.")
             return
 
-        # Extrai os dois componentes necessários
         atributos_base = dados_arquetipo["atributos_base"]
         taxas_crescimento = dados_arquetipo["taxas_crescimento"]
         
-        # Linha CORRIGIDA: passando o novo argumento obrigatório
         novo_personagem = Personagem(self.personagem["nome"], atributos_base, taxas_crescimento)
 
         self._personagem_obj = novo_personagem
@@ -308,9 +304,9 @@ class Jogo:
         # Mapeamento de todos os métodos de criação disponíveis
         # Estes são os métodos de classe que retornam uma instância de Inimigo
         metodos_fabrica = [
-            #Inimigo.GoblinNormal,
-            #Inimigo.GoblinArqueiro,
-            #Inimigo.GoblinEscudeiro,
+            Inimigo.GoblinNormal,
+            Inimigo.GoblinArqueiro,
+            Inimigo.GoblinEscudeiro,
             Inimigo.GoblinMago,
         ]
             
@@ -464,9 +460,9 @@ class Jogo:
     def menu_atributos_personagem(self) -> None:
         while True:
             print("\n=== Atributos dos Personagens ===\n")
-            print("Guerreiro -> ATK:20 | DEF:40 | HP:100 | Crit Chance:35% | Crit Dmg:150% | Mana Pool:30 | Mana Regen:3/turno \n" \
-            "\nMago -> ATK:40 | DEF:5 | HP:100 | Crit Chance:10% | Crit Dmg:200% | Mana Pool:60 | Mana Regen:10/turno \n" \
-            "\nArqueiro -> ATK:35 | DEF:8 | HP:100 | Crit Chance:25% | Crit Dmg:120% | Mana Pool:40 | Mana Regen:4/turno\n")
+            print(f"Guerreiro -> ATK:25 | DEF:40 | HP:100 | Crit Chance:35% | Crit Dmg:150% | Mana Pool:30 | Mana Regen:3/turno \n")
+            print(f"\nMago -> ATK:25 | DEF:20 | HP:100 | Crit Chance:10% | Crit Dmg:200% | Mana Pool:60 | Mana Regen:10/turno \n")
+            print(f"\nArqueiro -> ATK:30 | DEF:15 | HP:100 | Crit Chance:25% | Crit Dmg:120% | Mana Pool:40 | Mana Regen:4/turno\n")
             print("[0] Voltar")
             op = input("> ").strip()
 
