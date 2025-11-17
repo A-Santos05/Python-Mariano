@@ -75,10 +75,10 @@ class Missao:
                 return ResultadoMissao(venceu=False, detalhes="Combate interrompido por erro de implementação.")
             
             if not i.vivo:
-                print("Inimigo morreu")
+                #print("Inimigo morreu")
                 break
 
-            print("Inimigo ainda vivo")
+            #print("Inimigo ainda vivo")
             # NOVO: Lógica para o ataque especial do Goblin Grandão
             if i.nome == "Globi":
                 # 30% de chance para o ataque especial de Sangramento
@@ -104,28 +104,9 @@ class Missao:
             print(f"HP {p.nome}: {p.barra_hp(10)}")
 
             if not p.vivo:
-                print("Personagem morreu")
+                #print("Personagem morreu")
                 break
-            print("Personagem ainda vivo")       
-            turno += 1
-                # Adicionar um pequeno delay ou pausa aqui se fosse um jogo real
-
-            if not i.vivo:
-                break
-                
-            # 2. INIMIGO ATACA PERSONAGEM
-            
-            # Usamos o método 'atacar' da classe Entidade (método base simples)
-            dano_inimigo = i.atacar()
-            # O Personagem.receber_dano (que herda de Entidade) ainda espera um 'int' de dano normal
-            dano_recebido_personagem = p.receber_dano(dano_inimigo)
-            
-            print(f"{i.nome} revida! {p.nome} recebe {dano_recebido_personagem} de dano.")
-            print(f"HP {p.nome}: {p.barra_hp(10)}")
-
-            if not p.vivo:
-                break
-                
+            #print("Personagem ainda vivo")       
             turno += 1
             # Adicionar um pequeno delay ou pausa aqui se fosse um jogo real
 
