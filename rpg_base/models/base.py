@@ -1,7 +1,7 @@
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from .efeitos import Efeito
-from typing import List
+from typing import List, Dict, Any
 import math
 
 @dataclass
@@ -10,7 +10,14 @@ class Item:
     nome: str
     tipo: str # Ex: "Consumível", "Equipamento"
     efeito_quant: int # Ex: 30 para 30 HP
-    efeito_atributo: str = "" # Ex: "vida", "ataque", etc.
+    efeito_atributo: str = "" # Ex: "vida", "ataque", etc.    
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> Item:
+        return cls(**data)
 
 @dataclass
 class Atributos:

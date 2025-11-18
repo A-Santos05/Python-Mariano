@@ -4,6 +4,8 @@ from models.personagem import Personagem
 from models.inimigo import Inimigo
 from models.missao import Missao, ResultadoMissao
 from typing import Any, Dict
+import json
+import os
 import random
 
 class Jogo:
@@ -489,14 +491,37 @@ class Jogo:
             else:
                 print("Opção inválida.")
 
+    def _salvar_no_arquivo(self, nome_arquivo: str) -> None:
+        """Método auxiliar que realmente grava no disco."""
+        if not self._personagem_obj:
+            print("Erro: Não há personagem criado para salvar.")
+            return
+
+        try:
+            # Pega o dict do personagem
+            dados = self._personagem_obj.to_dict()
+            
+            # Garante que tem a extensão .json
+            if not nome_arquivo.endswith(".json"):
+                nome_arquivo += ".json"
+
+            with open(nome_arquivo, "w", encoding="utf-8") as f:
+                json.dump(dados, f, indent=4, ensure_ascii=False)
+            
+            print(f"Jogo salvo com sucesso em '{nome_arquivo}'!")
+            self._ultimo_save = nome_arquivo
+
+        except Exception as e:
+            print(f"Erro ao salvar: {e}")
+
     def _salvar_rapido(self) -> None:
-        self._ultimo_save = "quick_save.json"
-        print(f"✔ Salvo (simulado) em: {self._ultimo_save}")
+        self._salvar_no_arquivo("quicksave.json")
 
     def _salvar_nomeado(self) -> None:
-        nome = input("Nome do arquivo de save (ex.: meu_jogo.json): ").strip() or "save.json"
-        self._ultimo_save = nome
-        print(f"✔ Salvo (simulado) em: {self._ultimo_save}")
+        nome = input("Nome do arquivo de save (ex: meu_save): ").strip()
+        if not nome:
+            nome = "save_padrao"
+        self._salvar_no_arquivo(nome)
 
     def _ajuda_salvar(self) -> None:
         print("\nAjuda — Salvar")
@@ -524,20 +549,51 @@ class Jogo:
             else:
                 print("Opção inválida.")
 
+    def _carregar_do_arquivo(self, nome_arquivo: str) -> None:
+        """Método auxiliar que lê do disco e recria o objeto."""
+        
+        if not nome_arquivo.endswith(".json"):
+            nome_arquivo += ".json"
+            
+        if not os.path.exists(nome_arquivo):
+            print(f"Arquivo '{nome_arquivo}' não encontrado.")
+            return
+
+        try:
+            with open(nome_arquivo, "r", encoding="utf-8") as f:
+                dados = json.load(f)
+            
+            # Recria o personagem usando o método estático que criamos
+            self._personagem_obj = Personagem.from_dict(dados)
+            
+            # Atualiza o dicionário simples usado nos menus (para exibir nome/classe corretamente)
+            self.personagem["nome"] = self._personagem_obj.nome
+            self.personagem["arquetipo"] = self._personagem_obj.classe
+            
+            print(f"Personagem '{self._personagem_obj.nome}' carregado com sucesso!")
+            self._ultimo_load = nome_arquivo
+
+        except Exception as e:
+            print(f"Erro ao carregar arquivo (pode estar corrompido): {e}")
+
     def _carregar_ultimo(self) -> None:
-        if self._ultimo_save:
-            self._ultimo_load = self._ultimo_save
-            print(f"✔ Carregado (simulado) de: {self._ultimo_load}")
-        else:
-            print("Nenhum save recente encontrado (simulado).")
+        # Tenta carregar o quicksave ou o último salvo na sessão
+        alvo = self._ultimo_save or "quicksave.json"
+        print(f"Tentando carregar: {alvo}")
+        self._carregar_do_arquivo(alvo)
 
     def _carregar_nomeado(self) -> None:
-        nome = input("Nome do arquivo para carregar (ex.: meu_jogo.json): ").strip()
+        arquivos = [f for f in os.listdir('.') if f.endswith('.json')]
+        if arquivos:
+            print("Saves encontrados na pasta:")
+            for arq in arquivos:
+                print(f" - {arq}")
+        
+        nome = input("Nome do arquivo para carregar: ").strip()
         if nome:
-            self._ultimo_load = nome
-            print(f"✔ Carregado (simulado) de: {self._ultimo_load}")
+            self._carregar_do_arquivo(nome)
         else:
-            print("Nome não informado.")
+            print("Nome inválido.")
 
     def _ajuda_carregar(self) -> None:
         print("\nAjuda — Carregar")

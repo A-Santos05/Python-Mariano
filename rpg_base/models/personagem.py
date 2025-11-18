@@ -2,6 +2,7 @@ from __future__ import annotations
 from .base import Entidade, Atributos, Item
 from .efeitos import EscudoDeGuerra, TransfusaoArcana, FocoDoCacador, BencaoDivina, Efeito
 from typing import List, Union, Tuple
+from dataclasses import asdict
 import random
 import math
 
@@ -233,3 +234,43 @@ class Personagem(Entidade):
                 print("Sangramento cessou.")
 
         return dano_total
+
+    def to_dict(self) -> dict:
+        """Converte o personagem e seu estado atual para um dicionário."""
+        return {
+            "nome": self.nome,
+            "classe": self.classe,
+            "nivel": self.nivel,
+            "xp": self.xp,
+            # Converte a dataclass Atributos para dict
+            "atributos": asdict(self._atrib), 
+            # Converte cada Item do inventário para dict
+            "inventario": [item.to_dict() for item in self.inventario],
+            "taxas_crescimento": self._taxas_crescimento
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> Personagem:
+        """Cria uma instância de Personagem a partir de um dicionário carregado."""
+        
+        # 1. Recria o objeto Atributos
+        dados_atrib = data["atributos"]
+        atributos = Atributos(**dados_atrib)
+        
+        # 2. Cria a instância do Personagem
+        personagem = cls(
+            nome=data["nome"],
+            atrib=atributos,
+            taxas_crescimento=data["taxas_crescimento"],
+            arquetipo=data["classe"]
+        )
+        
+        # 3. Restaura dados simples
+        personagem.nivel = data["nivel"]
+        personagem.xp = data["xp"]
+        
+        # 4. Restaura o inventário (convertendo dicts de volta para objetos Item)
+        lista_itens_dicts = data.get("inventario", [])
+        personagem.inventario = [Item.from_dict(item_data) for item_data in lista_itens_dicts]
+        
+        return personagem

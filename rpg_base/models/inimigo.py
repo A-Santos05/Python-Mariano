@@ -108,6 +108,28 @@ class Inimigo(Entidade):
         )
 
     @classmethod
+    def Goblincotoco(cls, multiplicadores: Dict[str, float], nivel) -> Inimigo:
+        ataque_base = 1
+        defesa_base = 40
+        vida_base = 100
+        xp_base = 30
+
+        lista_de_possiveis_drops = [
+            Item("Poção de Cura Menor", "Consumível", 25, "vida"),
+            Item("Bandagem Simples", "Consumível", 10, "vida"),
+            # Adicione mais se quiser!
+        ]
+        mult_nivel = cls._calcular_multiplicador_nivel(nivel)
+        return cls( 
+            nome = "Goblin cotoco",
+            vida = int(vida_base * multiplicadores.get("vida", 1.0) * mult_nivel),
+            ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
+            itens_drop = lista_de_possiveis_drops,
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+        )
+
+    @classmethod
     def GoblinArqueiro(cls, multiplicadores: Dict[str, float], nivel) -> Inimigo:
         ataque_base = 10
         defesa_base = 10
