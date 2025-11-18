@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from .base import Entidade
 from .personagem import Personagem
 from .inimigo import Inimigo
 import random
@@ -50,25 +51,27 @@ class Missao:
             # 1. PERSONAGEM ATACA INIMIGO
             # Chamada ao método que você deve implementar em Personagem
             try:
+                if p._atrib.mana < p._atrib.mana_pool:#Calculo de regeneração de mana
+                    if p._atrib.mana + p._atrib.mana_regen > p._atrib.mana_pool:
+                        p._atrib.mana = p._atrib.mana_pool
+                    else:
+                        p._atrib.mana += p._atrib.mana_regen
+                
+                if p._atrib.mana >= p._atrib.special_cost:#Implementar uso de habilidade especial
+                    p._atrib.mana -= p._atrib.special_cost
+                    habilidade_nome = p.habilidade_especial()
+                    print(f"{p.nome} usa **{habilidade_nome}**!")
+                
                 # O Personagem.calcular_dano_base() agora retorna (dano_normal, dano_verdadeiro)
                 dano_personagem_tuple = p.calcular_dano_base() 
                 
                 # Chamada ao método de Entidade/Inimigo para cálculo de dano
                 dano_recebido_inimigo = i.receber_dano(dano_personagem_tuple)
                 
-                if p._atrib.mana < p._atrib.mana_pool:#Calculo de regeneração de mana
-                    if p._atrib.mana + p._atrib.mana_regen > p._atrib.mana_pool:
-                        p._atrib.mana = p._atrib.mana_pool
-                    else:
-                        p._atrib.mana += p._atrib.mana_regen
-
-                if p._atrib.mana >= p._atrib.special_cost:#Implementar uso de habilidade especial
-                    p._atrib.mana -= p._atrib.special_cost
-                    print(f"{p.nome} usou a habilidade especial!")#Habilidade especial ainda não foi implementada apenas placeholder
-                
                 print(f"{p.nome} ataca! {i.nome} recebe {dano_recebido_inimigo} de dano.")
                 print(f"MANA: {p._atrib.mana}/{p._atrib.mana_pool}")
                 print(f"HP {i.nome}: {i.barra_hp(10)}")
+                self._decrementar_efeitos(p)
 
             except NotImplementedError:
                 print("ERRO: Implemente Personagem.calcular_dano_base() primeiro.")
@@ -79,8 +82,8 @@ class Missao:
                 break
 
             #print("Inimigo ainda vivo")
-            # NOVO: Lógica para o ataque especial do Goblin Grandão
-            if i.nome == "Globi":
+            # NOVO: Lógica para o ataque especial do REI DO BOSTIL
+            if i.nome == "Globin":
                 # 30% de chance para o ataque especial de Sangramento
                 chance_especial = 0.3
                 if random.random() < chance_especial:
@@ -100,8 +103,10 @@ class Missao:
                 dano_recebido_personagem = p.receber_dano(dano_inimigo)
                 
                 print(f"{i.nome} revida! {p.nome} recebe {dano_recebido_personagem} de dano.")
+                self._decrementar_efeitos(i)
 
             print(f"HP {p.nome}: {p.barra_hp(10)}")
+            print(f"Efeitos: {p.efeitos_ativos}")
 
             if not p.vivo:
                 #print("Personagem morreu")
@@ -119,6 +124,9 @@ class Missao:
             print("=============Derrota!=============")
             print(f"{p.nome} foi derrotado!")
             print("==================================")
+
+        p.limpar_efeitos(ao_final_da_luta=True)
+        i.limpar_efeitos(ao_final_da_luta=True)
                 
         # --- Resultado Final ---
         if p.vivo:
@@ -137,3 +145,15 @@ class Missao:
         else:
             print(f"{p.nome} falhou na missão {self.titulo}.")
             return ResultadoMissao(venceu=False, detalhes=f"{p.nome} foi derrotado por {i.nome}.")
+        
+    def _decrementar_efeitos(self, entidade: Entidade): # NOVO MÉTODO AUXILIAR
+        """Decrementa a duração dos efeitos ativos e remove os que expiraram."""
+        efeitos_expirados = []
+        for efeito in list(entidade.efeitos_ativos):
+            if efeito.decrementar():
+                efeito.remover(entidade) # Chamada para remover (restaurar atributos, etc.)
+                efeitos_expirados.append(efeito)
+    
+        # Remove os efeitos expirados da lista
+        for efeito in efeitos_expirados:
+            entidade.efeitos_ativos.remove(efeito)

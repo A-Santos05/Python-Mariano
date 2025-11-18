@@ -1,5 +1,6 @@
 from __future__ import annotations
 from .base import Entidade, Atributos, Item
+from .efeitos import EscudoDeGuerra, TransfusaoArcana, FocoDoCacador, Efeito
 from typing import List, Union, Tuple
 import random
 import math
@@ -11,12 +12,13 @@ class Personagem(Entidade):
     Esta versão NÃO implementa a lógica principal de combate.
     """
 
-    def __init__(self, nome: str, atrib: Atributos, taxas_crescimento: dict[str, int]):
+    def __init__(self, nome: str, atrib: Atributos, taxas_crescimento: dict[str, int], arquetipo: str):
         super().__init__(nome, atrib)
         self.nivel = 1
         self.xp = 0
-        self._taxas_crescimento = taxas_crescimento # Armazena as taxas
+        self._taxas_crescimento = taxas_crescimento
         self.inventario: List[Item] = []
+        self.classe = arquetipo
 
     def coletar_item(self, item: Item) -> None:
         """Adiciona um item ao inventário."""
@@ -24,9 +26,6 @@ class Personagem(Entidade):
         self.inventario.append(item)
 
     def usar_item(self, nome_item: str) -> bool:
-        """Usa um item do inventário, aplicando seu efeito."""
-        
-        # Encontra o item, ignorando maiúsculas/minúsculas
         item_a_usar = next((item for item in self.inventario if item.nome.lower() == nome_item.lower()), None)
         
         if not item_a_usar:
@@ -49,26 +48,49 @@ class Personagem(Entidade):
             print(f"Item {item_a_usar.nome} é do tipo {item_a_usar.tipo} e não pode ser usado no momento.")
             return False
 
-    def calcular_dano_base(self) -> tuple[int, int]:
-        """
-        Implementação: Calcula dano normal (reduzido pela defesa) e dano verdadeiro (ignora defesa).
-        Retorna: (dano_normal, dano_verdadeiro)
-        """
-        dano_critico = random.random() * 100 < self._atrib.crit_chance
+    def calcular_dano_base(self) -> Tuple[int, int]:
+        """Calcula o dano normal e o dano verdadeiro, considerando buffs de Mago e Arqueiro."""
+        
+        # Conversão base de Dano Verdadeiro
+        conversao_verdadeira = self._atrib.dano_verdadeiro_perc / 100
+        
+        # 1. VERIFICAÇÃO DO BUFF DO MAGO (Transfusao Arcana)
+        efeito_mago = next((e for e in self.efeitos_ativos if e.nome == "Transfusão Arcana"), None)
+        if efeito_mago:
+            # Assumindo que o bônus está armazenado no objeto Efeito
+            conversao_verdadeira = conversao_verdadeira * (efeito_mago.bonus_conversao / 100)
+        
+        # Dano base antes do crítico
         dano_base = self._atrib.ataque
-        
-        # 1. Calcula o dano base final, aplicando o crítico se necessário
-        dano_final = dano_base
-        if dano_critico:
-            multiplicador_critico = self._atrib.crit_dmg / 100
-            dano_final = int(dano_base * multiplicador_critico)
-            print(f"{self.nome} acerta um crítico!")
 
-        # 2. Divide o dano final em Dano Verdadeiro e Dano Normal
-        dano_verdadeiro = int(dano_final * (self._atrib.dano_verdadeiro_perc / 100))
-        dano_normal = dano_final - dano_verdadeiro
+        # Dano normal e verdadeiro antes do crítico
+        dano_verdadeiro = int(dano_base * min(conversao_verdadeira, 1.0))
+        dano_normal = dano_base - dano_verdadeiro
         
-        return dano_normal, dano_verdadeiro
+        # Dano Critico (Chance e Multiplicador)
+        chance_critico = self._atrib.crit_chance / 100
+        multiplicador_critico = self._atrib.crit_dmg / 100
+
+        # 2. VERIFICAÇÃO DO BUFF DO ARQUEIRO (Foco do Caçador)
+        efeito_arqueiro = next((e for e in self.efeitos_ativos if e.nome == "Foco do Caçador"), None)
+        if efeito_arqueiro:
+            chance_critico += efeito_arqueiro.bonus_chance_crit / 100
+            multiplicador_critico += efeito_arqueiro.bonus_dano_crit / 100
+            
+        if random.random() < chance_critico:
+            # Aplica o multiplicador no dano total (Normal + Verdadeiro)
+            dano_total = dano_normal + dano_verdadeiro
+            dano_critico = int(dano_total * multiplicador_critico)
+            
+            # Recalcula as proporções do dano crítico (mantendo a proporção Normal/Verdadeiro)
+            dano_verdadeiro_final = int(dano_critico * min(conversao_verdadeira, 1.0))
+            dano_normal_final = dano_critico - dano_verdadeiro_final
+            
+            # Print de crítico (opcional)
+            print(f"*** CRÍTICO! ***")
+            return dano_normal_final, dano_verdadeiro_final
+        else:
+            return dano_normal, dano_verdadeiro
     
     def receber_dano(self, dano: Union[int, Tuple[int, int]]) -> int:
         """
@@ -96,12 +118,24 @@ class Personagem(Entidade):
             # Comportamento base (dano simples INT) - usa o método da Entidade
             return super().receber_dano(dano)
 
-    def habilidade_especial(self) -> int:
+    def habilidade_especial(self) -> str: # NOVO
         """
-        Deve retornar dano especial (ou 0 se indisponível).
-        (ex.: consumir self._atrib.mana e aplicar bônus de dano)
+        Gasta mana e aplica o efeito da habilidade especial da classe.
+        Retorna uma string com o nome da habilidade aplicada.
         """
-        raise NotImplementedError("Implementar habilidade especial do Personagem.")
+        # A Missão verifica a mana e gasta antes de chamar este método.
+        efeito_aplicar: Efeito
+        if self.classe == "Guerreiro":
+            efeito_aplicar = EscudoDeGuerra()
+        elif self.classe == "Mago":
+            efeito_aplicar = TransfusaoArcana()
+        elif self.classe == "Arqueiro":
+            efeito_aplicar = FocoDoCacador()
+        else:
+            return "Nenhuma habilidade especial implementada para esta classe."
+
+        self.aplicar_efeito(efeito_aplicar)
+        return efeito_aplicar.nome
     
     @staticmethod
     def xp_necessario_para_nivel(nivel: int) -> int:
@@ -162,7 +196,6 @@ class Personagem(Entidade):
             
             # Recalcula o CAP para o novo nível
             cap_xp = Personagem.xp_necessario_para_nivel(self.nivel)
-
 
     def aplicar_sangramento(self, dano_por_turno: int, duracao_turnos: int) -> None:
         """Aplica ou atualiza o efeito de sangramento."""

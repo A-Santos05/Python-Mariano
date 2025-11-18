@@ -1,9 +1,10 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from .efeitos import Efeito
+from typing import List
 import math
 
 @dataclass
-
 #Classe para representar um Item
 class Item:
     nome: str
@@ -38,6 +39,7 @@ class Entidade:
         if atrib.vida_max is None:
             atrib.vida_max = atrib.vida
         self._atrib = atrib
+        self.efeitos_ativos: List[Efeito] = []
 
     @property
     def nome(self) -> str:
@@ -64,3 +66,25 @@ class Entidade:
         cheio = int(largura * v / vmax)
         return "[" + " ❤️ " * cheio + " ♡ " * (largura - cheio) + f"] {v}/{vmax} HP"
 
+    def aplicar_efeito(self, efeito: Efeito):
+        """Adiciona um efeito, aplicando-o."""
+        # Se o efeito já estiver ativo, você pode re-aplicá-lo (resetar a duração)
+        # ou apenas ignorar. Aqui, vamos re-aplicar e remover o antigo (se houver)
+        for e in self.efeitos_ativos:
+            if e.nome == efeito.nome:
+                e.remover(self) # Chama o método 'remover' do efeito
+                self.efeitos_ativos.remove(e)
+                break
+                
+        self.efeitos_ativos.append(efeito)
+        efeito.aplicar(self)
+        print(f"[{self.nome}]: {efeito.nome} aplicado por {efeito.duracao_atual} turnos.")
+
+    def limpar_efeitos(self, ao_final_da_luta: bool = False):
+        """Remove todos os efeitos ativos, restaurando os atributos."""
+        # Apenas remove se a flag for True (no final da luta) ou se o efeito já expirou (em Missao.executar)
+        if ao_final_da_luta:
+            for efeito in list(self.efeitos_ativos): # Cria uma cópia para iterar
+                efeito.remover(self)
+            self.efeitos_ativos.clear()
+            print(f"[{self.nome}]: Todos os efeitos removidos.") # Opcional

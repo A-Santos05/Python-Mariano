@@ -149,7 +149,12 @@ class Jogo:
         atributos_base = dados_arquetipo["atributos_base"]
         taxas_crescimento = dados_arquetipo["taxas_crescimento"]
         
-        novo_personagem = Personagem(self.personagem["nome"], atributos_base, taxas_crescimento)
+        novo_personagem = Personagem(
+            self.personagem["nome"],
+            atributos_base, 
+            taxas_crescimento, 
+            arquetipo
+        )
 
         self._personagem_obj = novo_personagem
         
@@ -322,6 +327,56 @@ class Jogo:
         
         print(f"Inimigo gerado: {inimigo_instancia.nome}")
         return inimigo_instancia
+    
+    def mostrar_status_personagem(self) -> None:
+        """Exibe uma ficha completa do personagem atual."""
+        
+        if not self._personagem_obj:
+            print("\nVocê precisa criar um personagem primeiro.")
+            print("Use a opção [1] no menu principal.")
+            input("\nPressione Enter para continuar...")
+            return
+
+        p = self._personagem_obj
+        atrib = p._atrib
+        
+        print("\n--- Ficha do Personagem ---")
+        print(f"Nome:     {p.nome}")
+        print(f"Classe:   {p.classe}") # 'classe' foi definido no __init__ do Personagem
+        print(f"Nível:    {p.nivel}")
+        
+        # Lógica de XP
+        xp_necessario = p.xp_necessario_para_nivel(p.nivel)
+        print(f"XP:       {p.xp} / {xp_necessario}")
+        
+        print("\n--- Atributos de Combate ---")
+        print(f"HP:       {atrib.vida} / {atrib.vida_max}")
+        print(f"Mana:     {atrib.mana} / {atrib.mana_pool}")
+        print(f"Ataque:   {atrib.ataque}")
+        print(f"Defesa:   {atrib.defesa}")
+        
+        print("\n--- Atributos Secundários ---")
+        print(f"Regen. Mana: {atrib.mana_regen} / turno")
+        print(f"Custo Espec: {atrib.special_cost} Mana")
+        print(f"Chance Crít: {atrib.crit_chance}%")
+        print(f"Dano Crít:   {atrib.crit_dmg}%")
+        
+        if atrib.dano_verdadeiro_perc > 0:
+            print(f"Dano Verd.:  {atrib.dano_verdadeiro_perc}% (Conversão)")
+        
+        # Mostra efeitos ativos (se houver)
+        if p.efeitos_ativos:
+            print("\n--- Efeitos Ativos ---")
+            for efeito in p.efeitos_ativos:
+                print(f"- {efeito.nome} ({efeito.duracao_atual} turnos restantes)") #
+        
+        # Mostra sangramento ativo (se houver)
+        if atrib.sangramento_duracao > 0:
+            print("\n--- Efeitos Negativos ---")
+            print(f"🩸 Sangramento ({atrib.sangramento_dano} dano/turno, {atrib.sangramento_duracao} turnos restantes)")
+
+        print("\n------------------------------")
+        input("Pressione Enter para voltar ao menu...")
     
     def menu_inventario(self) -> None:
         if not self._personagem_obj:
