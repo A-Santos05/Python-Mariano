@@ -325,14 +325,40 @@ class Jogo:
 
         # Mapeamento de todos os métodos de criação disponíveis
         # Estes são os métodos de classe que retornam uma instância de Inimigo
-        metodos_fabrica = [
-            Inimigo.GoblinNormal,
-            Inimigo.GoblinArqueiro,
-            Inimigo.GoblinEscudeiro,
-            Inimigo.GoblinMago,
-        ]
+        if self.missao_config["cenario"] == "Floresta":
+            metodos_fabrica = [
+                Inimigo.GoblinNormal,
+                Inimigo.GoblinArqueiro,
+                Inimigo.GoblinEscudeiro,
+                Inimigo.GoblinMago,
+                Inimigo.Goblincotoco,
+            ]
+        elif self.missao_config["cenario"] == "Trilha":
+            metodos_fabrica = [
+                Inimigo.BandidodaTrilha,
+                Inimigo.LoboFerozdaTrilha,
+                Inimigo.GolemdaTrilha,
+                Inimigo.DruidaImpurodaTrilha,
+                Inimigo.GuardiaoEspinhosodaTrilha,
+            ]
+        elif self.missao_config["cenario"] == "Caverna":
+            metodos_fabrica = [
+               Inimigo.AranhaCavernal,
+               Inimigo.BarbadoCavernal,
+               Inimigo.MorcegoCavernal,
+               Inimigo.EsqueletoBalisticoCavernal,
+               Inimigo.XamaCavernal,
+            ]
+        elif self.missao_config["cenario"] == "Ruínas":
+            metodos_fabrica = [
+               Inimigo.EsqueletodasRuinas,
+               Inimigo.FantasmadasRuinas,
+               Inimigo.GarguladasRuinas,
+               Inimigo.GeomantedasRuinas,
+               Inimigo.AtiradorEnferrujadodasRuinas,
+            ]
             
-        # 1. Escolhe um MÉTODO aleatoriamente
+        # Verifica se o usuário pode jogar o cenário do Boss
         if self._personagem_obj.nivel >= 9 and self.missao_config["cenario"] == "Bostil":
             metodo_escolhido =Inimigo.ReiDoBostil
         else:

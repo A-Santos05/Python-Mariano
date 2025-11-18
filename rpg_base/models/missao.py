@@ -159,7 +159,7 @@ class Missao:
                 break
 
             #print("Inimigo ainda vivo")
-            # NOVO: Lógica para o ataque especial do REI DO BOSTIL
+            #Lógica para o ataque especial do REI DO BOSTIL
             if i.nome == "Globin":
                 # 30% de chance para o ataque especial de Sangramento
                 chance_especial = 0.3
