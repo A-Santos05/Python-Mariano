@@ -90,8 +90,6 @@ class Missao:
                         p.habilidade_especial()
                         #print(f"{p.nome} usou [{habilidade_nome}]")
                         habilidade_usada = True
-
-                        time.sleep(2)# Pequena pausa para melhor leitura
                         
                     elif habilidade_usada == True:
                         print(f"{p.nome} já usou a habilidade especial nesta luta!")
@@ -228,7 +226,7 @@ class Missao:
 
             if i.itens_drop:
                 item_sorteado = random.choice(i.itens_drop)
-                print("\n================ LOOT ================")
+                print("\n=================LOOT=================")
                 print(f"{p.nome} coletou: {item_sorteado.nome}")
                 print("======================================")
                 

@@ -36,62 +36,62 @@ class Jogo:
         mapa_atributos = {
             "Guerreiro":{
                 "atributos_base": Atributos(
-                    ataque = 25, vida = 100, defesa = 40, 
-                    crit_chance = 25, crit_dmg = 135,
-                    mana = 0, mana_pool = 30, mana_regen = 3, special_cost = 25
+                    ataque = 30, vida = 120, defesa = 15, 
+                    crit_chance = 35, crit_dmg = 130,
+                    mana = 0, mana_pool = 30, mana_regen = 6, special_cost = 25
                 ),
                 "taxas_crescimento": {
-                    "ataque": 2,
-                    "vida": 10,
-                    "defesa": 3,
+                    "ataque": 3,
+                    "vida": 15,
+                    "defesa": 6,
                 }
             },
             "Paladino":{
                 "atributos_base": Atributos(
-                    ataque = 20, vida = 100, defesa = 45,
+                    ataque = 20, vida = 120, defesa = 15,
                     crit_chance = 25, crit_dmg = 125, dano_verdadeiro_perc = 15,
-                    mana = 0, mana_pool = 35, mana_regen = 5, special_cost = 25
+                    mana = 0, mana_pool = 40, mana_regen = 7, special_cost = 25
                 ),
                 "taxas_crescimento": {
-                    "ataque": 2,
-                    "vida": 12,
-                    "defesa": 4,
+                    "ataque": 3,
+                    "vida": 17,
+                    "defesa": 6,
                 }
             },
             "Mago":{
                 "atributos_base": Atributos(
-                    ataque = 25, vida = 100, defesa = 15, 
-                    crit_chance = 5, crit_dmg = 200, dano_verdadeiro_perc = 25,
+                    ataque = 20, vida = 100, defesa = 15, 
+                    crit_chance = 15, crit_dmg = 200, dano_verdadeiro_perc = 25,
                     mana = 0,mana_pool = 60, mana_regen = 10, special_cost = 25
                     ),
                 "taxas_crescimento": {
-                    "ataque": 3,
-                    "vida": 5,
-                    "defesa": 2,
+                    "ataque": 5,
+                    "vida": 12,
+                    "defesa": 5,
                 }
             },
             "Arqueiro":{
                 "atributos_base": Atributos(
-                    ataque = 30, vida = 100, defesa = 20, 
+                    ataque = 20, vida = 100, defesa = 20, 
                     crit_chance = 35, crit_dmg = 135,
-                    mana = 0,mana_pool = 40, mana_regen = 4, special_cost = 25
+                    mana = 0,mana_pool = 40, mana_regen = 5, special_cost = 25
                     ),
                 "taxas_crescimento": {
-                    "ataque": 4,
-                    "vida": 5,
-                    "defesa": 1,
+                    "ataque": 6,
+                    "vida": 12,
+                    "defesa": 4,
                 }
             },
             "Espadachim":{
                 "atributos_base": Atributos(
-                    ataque = 20, vida = 100, defesa = 15, 
-                    crit_chance = 65, crit_dmg = 115,
-                    mana = 0, mana_pool = 45, mana_regen = 3, special_cost = 25
+                    ataque = 20, vida = 100, defesa = 20, 
+                    crit_chance = 65, crit_dmg = 125,
+                    mana = 0, mana_pool = 45, mana_regen = 5, special_cost = 25
                     ),
                 "taxas_crescimento": {
-                    "ataque": 2,
-                    "vida": 4,
-                    "defesa": 1,
+                    "ataque": 10,
+                    "vida": 12,
+                    "defesa": 3,
                 }
             },
         }
@@ -196,10 +196,34 @@ class Jogo:
         print(f"Vida Máxima Real: {novo_personagem._atrib.vida_max}")
 
     def _ajuda_criar_personagem(self) -> None:
-        print("\nAjuda — Criar Personagem")
-        print("- Defina um nome e um arquétipo para continuar.")
-        print("- Esta etapa não cria atributos reais; é apenas o fluxo do menu.")
-        print("- Implementações futuras podem usar essas escolhas para gerar status.")
+        print("\n======= Ajuda Criar Personagem =======")
+        print("- Defina um nome e um arquétipo e confirme sua criação para continuar.")
+        print("- Cada arquétipo tem atributos base e taxas de crescimento diferentes.")
+        print("- Voltar a esse menu durante a sessão e escolher 'Confirmar criação' irá reescrever o personagem atual.")
+        while True:
+            print("\n======= Arquétipos =======")
+            print("[1] Guerreiro")
+            print("[2] Mago")
+            print("[3] Arqueiro")
+            print("[4] Paladino")
+            print("[5] Espadachim")
+            print("[0] Voltar")
+            op = input("> ").strip()
+            
+            if op == "1":
+                print("Classe tank com alta defesa e vida, ataque baixo.")
+            elif op == "2":
+                print("Classe de dano mágico com alta regeneração de mana e dano verdadeiro.")
+            elif op == "3":
+                print("Classe de dano físico com alto ataque e chance crítica.")
+            elif op == "4":
+                print("Classe tank com altissima defesa e vida, atque baixo com dano verdadeiro.")
+            elif op == "5":
+                print("Classe de dano critico com alta chance crítica e ataque moderado, focado no uso da habilidade para dano significativo.")
+            elif op == "0":
+                break
+            else:
+                print("Opção inválida.")
 
     def menu_missao(self) -> None:
         while True:
@@ -282,7 +306,7 @@ class Jogo:
             print("Crie um personagem antes de iniciar uma missão.")
             return
 
-        # 1. Gera o Inimigo de Teste (aleatoriamente)
+        # 1. Gera o Inimigo
         inimigo_da_vez = self._gerar_inimigo_aleatorio()
 
         # 2. Cria a Missão
@@ -478,7 +502,7 @@ class Jogo:
                     item_exemplo = next(item for item in p.inventario if item.nome == nome)
                     
                     if item_exemplo.tipo == "Consumível":
-                        detalhe = f"(Cura {item_exemplo.efeito_quant} {item_exemplo.efeito_atributo.upper()})"
+                        detalhe = f"(Cura {item_exemplo.efeito_quant + int(p._atrib.vida_max * 0.1)} {item_exemplo.efeito_atributo.upper()})"
                         opcoes.append(nome)
                         print(f"[{idx}] {nome} x{quant} {detalhe}")
                         idx += 1
@@ -506,10 +530,11 @@ class Jogo:
                 print("Opção inválida.")
                 
     def _ajuda_missao(self) -> None:
-        print("\nAjuda — Missão")
+        print("\n======= Ajuda Missão =======")
         print("- Selecione dificuldade e cenário.")
-        print("- A opção 'Iniciar missão' executará apenas um placeholder.")
-        print("- Uma futura implementação pode usar essas escolhas para montar encontros.")
+        print("- A dificuldade afeta ATK/DEF/HP dos inimigos.")
+        print("- O cenário determina o tipo de inimigos encontrados.")
+        print("============================")
 
     def menu_salvar(self) -> None:
         while True:
@@ -564,10 +589,10 @@ class Jogo:
         self._salvar_no_arquivo(nome)
 
     def _ajuda_salvar(self) -> None:
-        print("\nAjuda — Salvar")
-        print("- Salvar rápido usa um nome padrão fictício.")
+        print("\n======= Ajuda Salvar =======")
+        print("- Salvar rápido usa um nome padrão.")
         print("- Salvar nomeado permite escolher um nome fictício.")
-        print("- Não há escrita em disco nesta base — é apenas navegação.")
+        print("- Salvar permite continuar a aventura mais tarde sem perder o progresso.")
 
     def menu_carregar(self) -> None:
         while True:
@@ -636,16 +661,43 @@ class Jogo:
             print("Nome inválido.")
 
     def _ajuda_carregar(self) -> None:
-        print("\nAjuda — Carregar")
-        print("- O carregamento aqui é apenas ilustrativo (sem leitura real).")
-        print("- Use o nome que você “salvou” anteriormente para simular.")
+        print("\n======= Ajuda Carregar =======")
+        print("- O carregamento é onde você recupera um personagem salvo.")
+        print("- Use o nome que você “salvou” anteriormente ou carregar ultimo para carregar.")
 
     def menu_atributos_personagem(self) -> None:
+        # Se criar uma nova classe no futuro, basta adicionar o nome aqui.
+        lista_classes = ["Guerreiro", "Mago", "Arqueiro", "Paladino", "Espadachim"]
+
         while True:
             print("\n=== Atributos dos Personagens ===\n")
-            print(f"Guerreiro -> ATK:25 | DEF:40 | HP:100 | Crit Chance:35% | Crit Dmg:150% | Mana Pool:30 | Mana Regen:3/turno \n")
-            print(f"\nMago -> ATK:25 | DEF:20 | HP:100 | Crit Chance:10% | Crit Dmg:200% | Mana Pool:60 | Mana Regen:10/turno \n")
-            print(f"\nArqueiro -> ATK:30 | DEF:15 | HP:100 | Crit Chance:25% | Crit Dmg:120% | Mana Pool:40 | Mana Regen:4/turno\n")
+            
+            for nome_classe in lista_classes:
+                # Busca os dados reais definidos no método _obter_atributos_por_arquetipo
+                dados = self._obter_atributos_por_arquetipo(nome_classe)
+                
+                if dados:
+                    # Extrai o objeto Atributos
+                    base = dados["atributos_base"]
+                    
+                    # Monta a string dinâmica
+                    info = (
+                        f"{nome_classe} -> "
+                        f"ATK: {base.ataque} | "
+                        f"DEF: {base.defesa} | "
+                        f"HP: {base.vida} | "
+                        f"Crit: {base.crit_chance}% | "
+                        f"CritDmg: {base.crit_dmg}% | "
+                        f"Mana: {base.mana_pool} | "
+                        f"Mana Regen: {base.mana_regen} / turno"
+                    )
+                    
+                    # Se a classe tiver Dano Verdadeiro, mostra também
+                    if base.dano_verdadeiro_perc > 0:
+                        info += f" | Dano Verdadeiro: {base.dano_verdadeiro_perc}%"
+
+                    print(info + "\n")
+
             print("[0] Voltar")
             op = input("> ").strip()
 

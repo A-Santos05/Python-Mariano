@@ -91,8 +91,9 @@ class Inimigo(Entidade):
         xp_base = 30
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -104,7 +105,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
 
     @classmethod
@@ -115,8 +117,9 @@ class Inimigo(Entidade):
         xp_base = 30
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
         mult_nivel = cls._calcular_multiplicador_nivel(nivel)
@@ -126,7 +129,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) + (nivel * 2)),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
 
     @classmethod
@@ -137,8 +141,9 @@ class Inimigo(Entidade):
         xp_base = 40
         
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -150,7 +155,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
 
     @classmethod
@@ -162,8 +168,9 @@ class Inimigo(Entidade):
         xp_base = 50
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -171,12 +178,13 @@ class Inimigo(Entidade):
 
         return cls(
             nome = "Goblin Mago",
-            vida = int(vida_base * multiplicadores.get("vida", 1.0) * mult_nivel),
+            vida = int(vida_base * multiplicadores.get("vida", 1.0) + (nivel * 5)),
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
-            dano_verdadeiro_perc = int(dano_verdadeiro_base * multiplicadores.get("dano_verdadeiro",1.0) * mult_nivel),
-            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
+            dano_verdadeiro_perc = int(dano_verdadeiro_base * multiplicadores.get("dano_verdadeiro",1.0) + (nivel * 1)),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) + (nivel * 1)),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
     
     @classmethod
@@ -187,8 +195,9 @@ class Inimigo(Entidade):
         xp_base = 30
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -200,7 +209,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
     
 
@@ -214,8 +224,9 @@ class Inimigo(Entidade):
         xp_base = 30
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -227,7 +238,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) + (nivel * 2)),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
 
     
@@ -239,8 +251,9 @@ class Inimigo(Entidade):
         xp_base = 30
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -252,7 +265,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
     
     @classmethod
@@ -264,8 +278,9 @@ class Inimigo(Entidade):
         xp_base = 50
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -273,12 +288,13 @@ class Inimigo(Entidade):
 
         return cls(
             nome = "Druida Impuro da Trilha",
-            vida = int(vida_base * multiplicadores.get("vida", 1.0) * mult_nivel),
+            vida = int(vida_base * multiplicadores.get("vida", 1.0) + (nivel * 5)),
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
-            dano_verdadeiro_perc = int(dano_verdadeiro_base * multiplicadores.get("dano_verdadeiro",1.0) * mult_nivel),
-            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
+            dano_verdadeiro_perc = int(dano_verdadeiro_base * multiplicadores.get("dano_verdadeiro",1.0) + (nivel * 1)),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) + (nivel * 1)),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
 
     
@@ -290,8 +306,9 @@ class Inimigo(Entidade):
         xp_base = 40
         
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -303,7 +320,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
 
 
@@ -315,8 +333,9 @@ class Inimigo(Entidade):
         xp_base = 30
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -328,7 +347,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
     
 
@@ -342,8 +362,9 @@ class Inimigo(Entidade):
         xp_base = 30
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -355,7 +376,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) + (nivel * 2)),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
     
 
@@ -367,8 +389,9 @@ class Inimigo(Entidade):
         xp_base = 30
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -380,7 +403,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
     
     @classmethod
@@ -391,8 +415,9 @@ class Inimigo(Entidade):
         xp_base = 40
         
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -404,7 +429,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
     
     @classmethod
@@ -416,8 +442,9 @@ class Inimigo(Entidade):
         xp_base = 50
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -425,12 +452,13 @@ class Inimigo(Entidade):
 
         return cls(
             nome = "Xamã Cavernal",
-            vida = int(vida_base * multiplicadores.get("vida", 1.0) * mult_nivel),
+            vida = int(vida_base * multiplicadores.get("vida", 1.0) + (nivel * 5)),
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
-            dano_verdadeiro_perc = int(dano_verdadeiro_base * multiplicadores.get("dano_verdadeiro",1.0) * mult_nivel),
-            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
+            dano_verdadeiro_perc = int(dano_verdadeiro_base * multiplicadores.get("dano_verdadeiro",1.0) + (nivel * 1)),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) + (nivel * 1)),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
     
     @classmethod
@@ -441,8 +469,9 @@ class Inimigo(Entidade):
         xp_base = 30
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -454,7 +483,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
     
 
@@ -468,8 +498,9 @@ class Inimigo(Entidade):
         xp_base = 30
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -481,7 +512,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) + (nivel * 2)),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
 
     @classmethod
@@ -492,8 +524,9 @@ class Inimigo(Entidade):
         xp_base = 30
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -505,7 +538,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
     
     @classmethod
@@ -516,8 +550,9 @@ class Inimigo(Entidade):
         xp_base = 40
         
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -529,7 +564,8 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
     
     @classmethod
@@ -541,8 +577,9 @@ class Inimigo(Entidade):
         xp_base = 50
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -550,12 +587,13 @@ class Inimigo(Entidade):
 
         return cls(
             nome = "Geomante das Ruínas",
-            vida = int(vida_base * multiplicadores.get("vida", 1.0) * mult_nivel),
+            vida = int(vida_base * multiplicadores.get("vida", 1.0) + (nivel * 5)),
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
-            dano_verdadeiro_perc = int(dano_verdadeiro_base * multiplicadores.get("dano_verdadeiro",1.0) * mult_nivel),
-            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
+            dano_verdadeiro_perc = int(dano_verdadeiro_base * multiplicadores.get("dano_verdadeiro",1.0) + (nivel * 1)),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) + (nivel * 1)),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
     
     @classmethod
@@ -566,8 +604,9 @@ class Inimigo(Entidade):
         xp_base = 30
 
         lista_de_possiveis_drops = [
-            Item("Poção de Cura Menor", "Consumível", 30, "vida"),
-            Item("Bandagem Simples", "Consumível", 15, "vida"),
+            Item("Poção de Cura Menor", "Consumível", 35, "vida"),
+            Item("Poção de Cura Maior", "Consumível", 50, "vida"),
+            Item("Bandagem Simples", "Consumível", 20, "vida"),
             # Adicione mais se quiser!
         ]
 
@@ -579,15 +618,16 @@ class Inimigo(Entidade):
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
             defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
             itens_drop = lista_de_possiveis_drops,
-            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
+            recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel),
+            nivel = nivel
         )
 
 
     @classmethod
     def ReiDoBostil(cls, multiplicadores: Dict[str, float], nivel) -> Inimigo:
-        vida_base = 1200
-        ataque_base = 55
-        defesa_base = 30
+        vida_base = 800
+        ataque_base = 35
+        defesa_base = 20
         xp_base = 500
         
         return cls(
@@ -613,8 +653,8 @@ class Inimigo(Entidade):
         dano_recebido = alvo.receber_dano(dano_final)
         
         # Aplica o efeito de Sangramento
-        # Sangramento padrão: 20 de dano por turno, duração de 2 turnos
-        dano_sangramento = 20
+        # Sangramento padrão: 10 de dano por turno, duração de 2 turnos
+        dano_sangramento = 10
         duracao = 2
 
         print(f"** {self.nome} usa ATAQUE SANGRENTO! {alvo.nome} recebe {dano_recebido} de dano! **")

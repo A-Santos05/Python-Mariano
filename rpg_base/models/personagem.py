@@ -34,7 +34,7 @@ class Personagem(Entidade):
         if item_a_usar.tipo == "Consumível":
             if item_a_usar.efeito_atributo == "vida":
                 # Lógica de cura
-                cura = item_a_usar.efeito_quant
+                cura = item_a_usar.efeito_quant + int(self._atrib.vida_max * 0.1) # Cura base + 10% da vida máxima
                 self._atrib.vida = min(self._atrib.vida_max, self._atrib.vida + cura)
                 print(f"\nUsou {item_a_usar.nome}. Curou {cura} HP.")
                 print(f"HP atual: {self._atrib.vida}/{self._atrib.vida_max}")
@@ -151,19 +151,19 @@ class Personagem(Entidade):
         if nivel <= 0:
             return 140 # Garante um valor mínimo
         # Fórmula de progressão de XP: 100 * (N * 1.4)
-        # Explicação: Cada nível requer 40% a mais de XP que o nível anterior.
-        # nivel 1 -> 140 XP
-        # nivel 2 -> 280 XP
-        # nivel 3 -> 420 XP
-        # nivel 4 -> 560 XP
-        # nivel 5 -> 700 XP
-        # nivel 6 -> 840 XP
-        # nivel 7 -> 980 XP
-        # nivel 8 -> 1120 XP
-        # nivel 9 -> 1260 XP
-        # nivel 10 -> 1400 XP
+        # Explicação: Cada nível requer 30% a mais de XP que o nível anterior.
+        # nivel 1 -> 130 XP
+        # nivel 2 -> 260 XP
+        # nivel 3 -> 390 XP 
+        # nivel 4 -> 520 XP
+        # nivel 5 -> 650 XP
+        # nivel 6 -> 780 XP
+        # nivel 7 -> 910 XP
+        # nivel 8 -> 1040 XP
+        # nivel 9 -> 1170 XP
+        # nivel 10 -> 1300 XP
         
-        return round(100 * (nivel * 1.4))
+        return round(100 * (nivel * 1.3))
     
     def ganhar_xp(self, valor_xp: int) -> None:
         """

@@ -87,7 +87,6 @@ class BencaoDivina(Efeito):
         alvo._atrib.vida = min(alvo._atrib.vida_max, alvo._atrib.vida + self.cura)
         print(f"Bênção Divina cura {self.cura} de vida!")
         
-
     def remover(self, alvo: 'Personagem'):
         print(f"Bênção Divina expirou.")
 
@@ -97,7 +96,7 @@ class Zandatsu(Efeito):
     def __init__(self):
         super().__init__("Zandatsu", 2)
         self.bonus_chance_crit = 10 # +10% de chance crítica
-        self.bonus_dano_crit = 100 # +100% de dano crítica
+        self.bonus_dano_crit = 130 # +100% de dano crítica
         
     def aplicar(self, alvo: 'Personagem'):
         # Não muda o atributo diretamente, o cálculo está em Personagem.calcular_dano_base()
