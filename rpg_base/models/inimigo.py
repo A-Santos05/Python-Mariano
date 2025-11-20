@@ -84,7 +84,7 @@ class Inimigo(Entidade):
     """Definições de atributos para inimigos específicos"""
 
     @classmethod
-    def GoblinNormal(cls, multiplicadores: Dict[str, float], nivel) -> Inimigo:
+    def GoblinNormal(cls, multiplicadores: Dict[str, float], nivel) -> Inimigo:#recebe multiplicaderes de difuculdade(0.8, 1.0, 1.2...) e nivel do inimigo como int (1, 2, 3...)
         vida_base = 100
         ataque_base = 5
         defesa_base = 10
@@ -124,7 +124,7 @@ class Inimigo(Entidade):
             nome = "Goblin cotoco",
             vida = int(vida_base * multiplicadores.get("vida", 1.0) * mult_nivel),
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
-            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) + (nivel * 2)),
             itens_drop = lista_de_possiveis_drops,
             recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
         )
@@ -225,7 +225,7 @@ class Inimigo(Entidade):
             nome = "Bandido da Trilha",
             vida = int(vida_base * multiplicadores.get("vida", 1.0) * mult_nivel),
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
-            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) + (nivel * 2)),
             itens_drop = lista_de_possiveis_drops,
             recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
         )
@@ -353,7 +353,7 @@ class Inimigo(Entidade):
             nome = "Morcego Cavernal",
             vida = int(vida_base * multiplicadores.get("vida", 1.0) * mult_nivel),
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
-            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) + (nivel * 2)),
             itens_drop = lista_de_possiveis_drops,
             recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
         )
@@ -479,7 +479,7 @@ class Inimigo(Entidade):
             nome = "Esqueleto das Ruínas",
             vida = int(vida_base * multiplicadores.get("vida", 1.0) * mult_nivel),
             ataque = int(ataque_base * multiplicadores.get("ataque", 1.0) * mult_nivel),
-            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) * mult_nivel),
+            defesa = int(defesa_base * multiplicadores.get("defesa", 1.0) + (nivel * 2)),
             itens_drop = lista_de_possiveis_drops,
             recompensa_xp = int(xp_base * multiplicadores.get("xp", 1.0) * mult_nivel)
         )
